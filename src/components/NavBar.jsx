@@ -66,7 +66,7 @@ const Navbar = () => {
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === ' 客服系統' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity(' 客服系統')}>
+                                onClick={() => openCity('客服系統')}>
                                 客服系統
                             </button>
                             <button

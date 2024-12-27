@@ -6,73 +6,73 @@ import HomePage from "../pages/HomePage";
 const Navbar = () => {
     const [activeTab, setActiveTab] = useState('主頁');
 
-    const openCity = (cityName) => {
-        setActiveTab(cityName);
+    const openPage = (pageName) => {
+        setActiveTab(pageName);
     };
     return (
         <>
             <div className="m-0 p-0 flex bg-gray-400 ">
                 <div className="w-[20vw] flex  p-10 rounded-xl ">
                     <div className="bg-gray-300 p-4 rounded-xl h-[95vh] " >
-                        <nav className="flex-1 bg-gray-300 p-4 space-y-2 text-center">
+                        <nav className="flex-1 bg-gray-300 p-2 space-y-2 text-center">
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-300 text-3xl ${activeTab === '會員管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('主頁')}>
+                                onClick={() => openPage('主頁')}>
                                 <h1 className="text-5xl font-bold text-gray-800 italic text-center font-poppins">Kagu machi</h1>
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '會員管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('會員管理')}>
+                                onClick={() => openPage('會員管理')}>
                                 會員管理
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '商品管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('商品管理')}>
+                                onClick={() => openPage('商品管理')}>
                                 商品管理
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '訂單管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('訂單管理')}>
+                                onClick={() => openPage('訂單管理')}>
                                 訂單管理
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '財務管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('財務管理')}>
+                                onClick={() => openPage('財務管理')}>
                                 財務管理
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '庫存/倉儲' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('庫存/倉儲')}>
+                                onClick={() => openPage('庫存/倉儲')}>
                                 庫存/倉儲
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '行銷/促銷' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('行銷/促銷')}>
+                                onClick={() => openPage('行銷/促銷')}>
                                 行銷/促銷
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '數據/報表' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('數據/報表')}>
+                                onClick={() => openPage('數據/報表')}>
                                 數據/報表
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === ' 客服系統' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('客服系統')}>
+                                onClick={() => openPage('客服系統')}>
                                 客服系統
                             </button>
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '設定' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
-                                onClick={() => openCity('設定')}>
+                                onClick={() => openPage('設定')}>
                                 設定
                             </button>
                         </nav>

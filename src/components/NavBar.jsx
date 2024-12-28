@@ -14,7 +14,7 @@ const Navbar = () => {
             <div className="m-0 p-0 flex bg-gray-400 ">
                 <div className="w-[20vw] flex  p-10 rounded-xl ">
                     <div className="bg-gray-300 p-4 rounded-xl h-[95vh] " >
-                        <nav className="flex-1 bg-gray-300 p-2 space-y-2 text-center">
+                        <nav className="flex-1 bg-gray-300 p-2 text-center">
                             <button
                                 className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-300 text-3xl ${activeTab === '會員管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}

@@ -18,11 +18,8 @@ function OrderManagement() {
 
   return (
     <>
-      <div className="flex bg-gray-400 h-screen">
-        <div className="basis-1/4 border-2 border-black text-center">
-          我是選單
-        </div>
-        <div className="flex flex-col basis-3/4 border-2 border-black">
+      <div className="flex bg-gray-400">
+        <div className="flex flex-col border-2 border-black  w-screen">
           <div className="flex basis-1/4 border-2 border-black">
             <div className="flex-1 m-4">
               <OrderMonthBarChart />
@@ -35,7 +32,7 @@ function OrderManagement() {
             <div className="flex-row border-2 border-black h-full">
               <div className="flex justify-between basis-2/12">
                 <div className="flex">
-                  <Date />
+                  <Date className="p-1"/>
                   <button className="px-2 my-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
                     確認
                   </button>

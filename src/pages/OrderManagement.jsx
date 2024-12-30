@@ -6,7 +6,7 @@ function OrderManagement() {
   const rows = [];
   for (let i = 0; i < 20; i++) {
     rows.push(
-      <tr>
+      <tr key={i + 1}>
         <td className="border-2 text-center text-4xl px-6">20241229001</td>
         <td className="border-2 text-center text-4xl px-6">王小明</td>
         <td className="border-2 text-center text-4xl px-6">2024-12-29</td>
@@ -18,7 +18,7 @@ function OrderManagement() {
 
   return (
     <>
-      <div className="flex bg-gray-400">
+      <div className="flex bg-gray-400 h-[100%]">
         <div className="flex flex-col border-2 border-black  w-screen">
           <div className="flex basis-1/4 border-2 border-black">
             <div className="flex-1 m-4">
@@ -32,7 +32,7 @@ function OrderManagement() {
             <div className="flex-row border-2 border-black h-full">
               <div className="flex justify-between basis-2/12">
                 <div className="flex">
-                  <Date className="p-1"/>
+                  <Date className="p-1" />
                   <button className="px-2 my-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
                     確認
                   </button>
@@ -51,15 +51,25 @@ function OrderManagement() {
               </div>
               <div className="flex basis-10/12 justify-center overflow-y-auto h-3/4 mt-8">
                 <table className="border-2 border-collapse">
-                  <tr>
-                    <th className="border-2 text-center text-4xl">訂單編號</th>
-                    <th className="border-2 text-center text-4xl">訂購人</th>
-                    <th className="border-2 text-center text-4xl">訂購日期</th>
-                    <th className="border-2 text-center text-4xl">訂購金額</th>
-                    <th className="border-2 text-center text-4xl">配送狀態</th>
-                  </tr>
+                  <thead>
+                    <tr>
+                      <th className="border-2 text-center text-4xl">
+                        訂單編號
+                      </th>
+                      <th className="border-2 text-center text-4xl">訂購人</th>
+                      <th className="border-2 text-center text-4xl">
+                        訂購日期
+                      </th>
+                      <th className="border-2 text-center text-4xl">
+                        訂購金額
+                      </th>
+                      <th className="border-2 text-center text-4xl">
+                        配送狀態
+                      </th>
+                    </tr>
+                  </thead>
                   {/* 測試內容 */}
-                  {rows}
+                  <tbody>{rows}</tbody>
                   {/* 測試內容 */}
                 </table>
               </div>

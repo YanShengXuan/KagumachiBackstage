@@ -10,10 +10,10 @@ const Navbar = () => {
   };
   return (
     <>
-      <div className="m-0 p-0  flex bg-color3">
-        <div className=" flex  p-10 rounded-xl ">
+      <div className="bg-color3">
+        <div className="flex p-10 rounded-xl">
           <div className="bg-color2 p-4 rounded-xl w-[20vw] h-[95vh] ">
-            <div className=" bg-color2 p-2  flex-col flex-wrap text-center ">
+            <div className=" bg-color2 p-2 flex-col flex-wrap text-center">
               <button
                 className={`rounded-3xl  text-black py-5 px-4 bg-color2 text-3xl ${
                   activeTab === "主頁" ? "bg-color2" : "bg-color2"
@@ -31,6 +31,7 @@ const Navbar = () => {
                 onClick={() => openPage("會員管理")}
               >
                 會員管理
+                <Link></Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
@@ -46,7 +47,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("訂單管理")}
               >
-                <Link to="ordermanagement">訂單管理</Link>
+                <Link to="orderManagement">訂單管理</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
@@ -54,7 +55,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("財務管理")}
               >
-                財務管理
+                <Link to="financialManagement">財務管理</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
@@ -63,6 +64,7 @@ const Navbar = () => {
                 onClick={() => openPage("庫存/倉儲")}
               >
                 庫存/倉儲
+                <Link></Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
@@ -71,14 +73,16 @@ const Navbar = () => {
                 onClick={() => openPage("行銷/促銷")}
               >
                 行銷/促銷
+                <Link></Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "數據/報表" ?"bg-color2" : "bg-color2"
+                  activeTab === "數據/報表" ? "bg-color2" : "bg-color2"
                 }`}
                 onClick={() => openPage("數據/報表")}
               >
                 數據/報表
+                <Link></Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
@@ -87,6 +91,7 @@ const Navbar = () => {
                 onClick={() => openPage("客服系統")}
               >
                 客服系統
+                <Link></Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1 text-3xl ${
@@ -95,6 +100,7 @@ const Navbar = () => {
                 onClick={() => openPage("設定")}
               >
                 設定
+                <Link></Link>
               </button>
             </div>
           </div>

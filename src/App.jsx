@@ -1,5 +1,8 @@
-import NavBar from './components/NavBar'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AppLayout from './components/AppLayout';
+import HomePage from "./pages/HomePage";
+import "./App.css";
+import Navbar from "./components/NavBar";
 
 import FinancialManagement from './pages/FinancialManagement.jsx'
 import OrderManagement from './pages/OrderManagement.jsx'
@@ -8,9 +11,14 @@ import OrderManagement from './pages/OrderManagement.jsx'
 function App() {
 
   return (
-    <>
-      <NavBar />
-    </>
+      <BrowserRouter basename="/KagumachiBackstage">
+        <Routes>
+          <Route path="/" element={<AppLayout />}>
+             <Route index element={<HomePage />} />
+               <Route path="homepage" element={<HomePage />} /> 
+          </Route>
+        </Routes>
+      </BrowserRouter>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from 'react'
 import HomePage from "../pages/HomePage";
-
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [activeTab, setActiveTab] = useState('主頁');
@@ -11,136 +11,77 @@ const Navbar = () => {
     };
     return (
         <>
-            <div className="m-0 p-0 flex bg-gray-400 ">
-                <div className="w-[20vw] flex  p-10 rounded-xl ">
-                    <div className="bg-gray-300 p-4 rounded-xl h-[95vh] " >
-                        <nav className="flex-1 bg-gray-300 p-2 text-center">
+            <div className="m-0 p-0  flex bg-gray-400 ">
+                <div className=" flex  p-10 rounded-xl ">
+                    <div className="bg-gray-300 p-4 rounded-xl w-[20vw] h-[95vh] " >
+                        <div className=" bg-gray-300 p-2  flex-col flex-wrap text-center ">
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-300 text-3xl ${activeTab === '會員管理' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl  text-white py-5 px-4 hover:bg-gray-300 text-3xl ${activeTab === '會員管理' ? 'bg-gray-500' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('主頁')}>
-                                <h1 className="text-5xl font-bold text-gray-800 italic text-center font-poppins">Kagu machi</h1>
+                                <h1 className="text-4xl  font-bold text-gray-800 italic text-center font-poppins">Kagu machi</h1>
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '會員管理' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '會員管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('會員管理')}>
                                 會員管理
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '商品管理' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full  block  text-center text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '商品管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('商品管理')}>
                                 商品管理
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '訂單管理' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '訂單管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('訂單管理')}>
                                 訂單管理
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '財務管理' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '財務管理' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('財務管理')}>
                                 財務管理
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '庫存/倉儲' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '庫存/倉儲' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('庫存/倉儲')}>
                                 庫存/倉儲
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '行銷/促銷' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '行銷/促銷' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('行銷/促銷')}>
                                 行銷/促銷
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '數據/報表' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '數據/報表' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('數據/報表')}>
                                 數據/報表
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === ' 客服系統' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === ' 客服系統' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('客服系統')}>
                                 客服系統
                             </button>
                             <button
-                                className={`rounded-3xl w-full text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '設定' ? 'bg-gray-300' : 'bg-gray-300'
+                                className={`rounded-3xl w-full block text-white py-5 px-4 hover:bg-gray-500 text-3xl ${activeTab === '設定' ? 'bg-gray-300' : 'bg-gray-300'
                                     }`}
                                 onClick={() => openPage('設定')}>
                                 設定
                             </button>
-                        </nav>
+                        </div>
                     </div>
                 </div>
-                <div className="w-[80vw] flex  p-10 rounded-xl ">
-                    <div className="bg-gray-300 p-4 rounded-xl h-[95vh] w-[100vw]" >
-                        {activeTab === '主頁' && (
-                            <div className="">
-                                <HomePage />
-                            </div>
-                        )}
-                        {activeTab === '會員管理' && (
-                            <div>
-                                <h3 className="text-xl font-bold">會員管理</h3>
-                                <p>會員管理的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '商品管理' && (
-                            <div>
-                                <h3 className="text-xl font-bold">商品管理</h3>
-                                <p>商品管理的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '訂單管理' && (
-                            <div>
-                                <h3 className="text-xl font-bold">訂單管理</h3>
-                                <p>訂單管理的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '財務管理' && (
-                            <div>
-                                <h3 className="text-xl font-bold">財務管理</h3>
-                                <p>財務管理的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '庫存/倉儲' && (
-                            <div>
-                                <h3 className="text-xl font-bold">庫存/倉儲</h3>
-                                <p>庫存/倉儲的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '行銷/促銷' && (
-                            <div>
-                                <h3 className="text-xl font-bold">行銷/促銷</h3>
-                                <p>行銷/促銷</p>
-                            </div>
-                        )}
-                        {activeTab === '數據/報表' && (
-                            <div>
-                                <h3 className="text-xl font-bold">數據/報表</h3>
-                                <p>數據/報表的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '客服系統' && (
-                            <div>
-                                <h3 className="text-xl font-bold">客服系統</h3>
-                                <p>客服系統的頁面</p>
-                            </div>
-                        )}
-                        {activeTab === '設定' && (
-                            <div>
-                                <h3 className="text-xl font-bold">設定</h3>
-                                <p>設定的頁面</p>
-                            </div>
-                        )}
+                {/* <div className="w-[80vw] flex  p-10 rounded-xl ">
+                    <div className="bg-gray-300 p-4 rounded-xl h-[95vh] w-[100vw]" >                       
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     );

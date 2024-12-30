@@ -22,7 +22,7 @@ function Date() {
 
   return (
     <>
-      <div className="flex m-2">
+      <div className="flex m-2 pt-0.5">
         <div>
           <DatePicker
             selected={startDate}

@@ -34,17 +34,20 @@ function OrderManagement() {
           <div className="basis-3/4 border-2 border-black h-48 p-2">
             <div className="flex-row border-2 border-black h-full">
               <div className="flex justify-between basis-2/12">
-                <div>
+                <div className="flex">
                   <Date />
+                  <button className="px-2 my-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
+                    確認
+                  </button>
                 </div>
                 <div className="m-2">
-                  <button className="mr-2 px-4 py-2 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="mr-2 py-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
                     時間排序
                   </button>
-                  <button className="mr-2 px-4 py-2 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="mr-2 py-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
                     金額排序
                   </button>
-                  <button className="px-4 py-2 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="py-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
                     狀態排序
                   </button>
                 </div>

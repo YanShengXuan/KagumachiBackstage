@@ -86,12 +86,19 @@ const Navbar = () => {
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === " 客服系統" ? "bg-color2" : "bg-color2"
+                  activeTab === "配送/物流" ? "bg-color2" : "bg-color2"
+                }`}
+                onClick={() => openPage("配送/物流")}
+              >
+                <Link to="ship">配送/物流</Link>
+              </button>
+              <button
+                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
+                  activeTab === "客服系統" ? "bg-color2" : "bg-color2"
                 }`}
                 onClick={() => openPage("客服系統")}
               >
-                客服系統
-                <Link></Link>
+                <Link>客服系統</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1 text-3xl ${

@@ -10,7 +10,6 @@ const Navbar = () => {
   };
   return (
     <>
-    <div>{activeTab}</div>
       <div className="bg-color3">
         <div className="flex p-10 rounded-xl">
           <div className="bg-color2 p-4 rounded-xl w-[20vw] h-[95vh] ">

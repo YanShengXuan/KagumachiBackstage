@@ -106,8 +106,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("設定")}
               >
-                設定
-                <Link></Link>
+                <Link to="setting">設定</Link>
               </button>
             </div>
           </div>

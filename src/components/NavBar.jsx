@@ -81,8 +81,8 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("數據/報表")}
               >
-                數據/報表
-                <Link></Link>
+                
+                <Link to="incomeStatement">數據/報表</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${

@@ -8,6 +8,8 @@ import "./App.css";
 import FinancialManagement from "./pages/FinancialManagement.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
 
+import IncomeStatement from "./pages/IncomeStatement";
+
 function App() {
   return (
     <BrowserRouter basename="/KagumachiBackstage">
@@ -19,6 +21,7 @@ function App() {
           <Route path="financialManagement" element={<FinancialManagement />} />
           <Route path="ship" element={<Ship />} />
           <Route path="setting" element={<Setting />} />
+          <Route path="incomeStatement" element={<IncomeStatement />} />
         </Route>
       </Routes>
     </BrowserRouter>

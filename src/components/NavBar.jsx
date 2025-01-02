@@ -21,7 +21,7 @@ const Navbar = () => {
                 onClick={() => openPage("主頁")}
               >
                 <h1 className="text-4xl  font-bold text-gray-800 italic text-center font-poppins">
-                  Kagu machi
+                  <Link to="testone">Kagu machi</Link>
                 </h1>
               </button>
               <button

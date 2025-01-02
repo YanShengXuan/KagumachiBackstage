@@ -11,17 +11,17 @@ import {
   Legend,
 } from "chart.js";
 
-// 註冊 Chart.js 的元件
+
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
 
 const ChartOne = () => {
-  // 定義圖表數據和配置
+  
   const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: ["1月", "3月", "5月", "7月", "9月", "12月"],
     datasets: [
       {
-        label: "Sales",
-        data: [30, 50, 40, 60, 70, 90],
+        label: "", //標題
+        data: [0, 30, 40, 80, 90, 110],
         backgroundColor: "rgba(75, 192, 192, 0.2)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 2,
@@ -38,14 +38,14 @@ const ChartOne = () => {
       },
       title: {
         display: true,
-        text: "Monthly Sales Data",
+        text: "Member",
       },
     },
   };
 
   return (
     <div>
-      <h2>Line Chart Example</h2>
+      
       <Line data={data} options={options} />
     </div>
   );

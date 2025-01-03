@@ -22,7 +22,7 @@ const IncomeStatement = () => {
                     <div className="mt-6">
                         <Report year={year} quarter={quarter} />
                     </div>
-                    <div className=" flex items-center ">
+                    <div className="mt-6">
                         <GaugeChart />
                     </div>
                 </div>

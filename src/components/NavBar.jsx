@@ -30,8 +30,8 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("會員管理")}
               >
-                會員管理
-                <Link></Link>
+
+                <Link to="memberpage">會員管理</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
@@ -39,7 +39,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("商品管理")}
               >
-                商品管理
+                <Link to="productspage">商品管理</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${

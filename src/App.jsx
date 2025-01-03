@@ -10,6 +10,9 @@ import FinancialManagement from "./pages/FinancialManagement.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
 
 import IncomeStatement from "./pages/IncomeStatement";
+import MemberPage from "./pages/MemberPage.jsx";
+import ProductsPage from "./pages/ProductsPage.jsx";
+import Categories from "./pages/Categories.jsx";
 
 function App() {
   return (
@@ -24,6 +27,10 @@ function App() {
           <Route path="setting" element={<Setting />} />
           <Route path="incomeStatement" element={<IncomeStatement />} />
           <Route path="testone" element={<TestOne />} />
+          <Route path="memberpage" element={<MemberPage />} />
+          <Route path="productspage" element={<ProductsPage />} />
+          <Route path="categories" element={<Categories />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

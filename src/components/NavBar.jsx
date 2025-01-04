@@ -98,7 +98,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("客服系統")}
               >
-                <Link>客服系統</Link>
+                <Link to="chat">客服系統</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1 text-2xl ${

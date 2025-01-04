@@ -4,16 +4,14 @@ import HomePage from "./pages/HomePage";
 import Ship from "./pages/Ship";
 import Setting from "./pages/Setting";
 import TestOne from "./pages/TestOne.jsx";
-import "./App.css";
-
 import FinancialManagement from "./pages/FinancialManagement.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
-
 import IncomeStatement from "./pages/IncomeStatement";
 import MemberPage from "./pages/MemberPage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import Categories from "./pages/Categories.jsx";
-
+import Chat from "./pages/Chat";
+import "./App.css";
 function App() {
   return (
     <BrowserRouter basename="/KagumachiBackstage">
@@ -30,7 +28,7 @@ function App() {
           <Route path="memberpage" element={<MemberPage />} />
           <Route path="productspage" element={<ProductsPage />} />
           <Route path="categories" element={<Categories />} />
-
+          <Route path="chat" element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>

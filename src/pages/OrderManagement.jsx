@@ -18,8 +18,8 @@ function OrderManagement() {
 
   return (
     <>
-      <div className="flex bg-gray-400 h-[100%]">
-        <div className="flex flex-col w-[100%]">
+      <div className="w-full bg-[#A6A6A6] h-full pt-10">
+        <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
           <div className="flex basis-1/4">
             <div className="flex-1 m-4">
               <OrderMonthBarChart />
@@ -33,23 +33,23 @@ function OrderManagement() {
               <div className="flex justify-between basis-2/12">
                 <div className="flex">
                   <Date className="p-1" />
-                  <button className="px-2 my-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="px-2 my-2 w-32 rounded-xl bg-[rgb(83,87,89)] text-white hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]">
                     確認
                   </button>
                 </div>
                 <div className="m-2">
-                  <button className="mr-2 py-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="mr-2 py-2 w-32 rounded-xl bg-[rgb(83,87,89)] text-white hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]">
                     時間排序
                   </button>
-                  <button className="mr-2 py-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="mr-2 py-2 w-32 rounded-xl bg-[rgb(83,87,89)] text-white hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]">
                     金額排序
                   </button>
-                  <button className="py-2 w-32 bg-amber-600 text-black rounded hover:bg-lime-600">
+                  <button className="py-2 w-32 rounded-xl bg-[rgb(83,87,89)] text-white hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]">
                     狀態排序
                   </button>
                 </div>
               </div>
-              <div className="flex basis-10/12 justify-center overflow-y-auto h-[80%] mt-4">
+              <div className="flex basis-10/12 justify-center overflow-y-auto h-[230%] mt-4">
                 <table className="border-2 border-collapse w-[100%] mr-1">
                   <thead>
                     <tr>

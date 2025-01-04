@@ -31,7 +31,7 @@ function OrderManagement() {
     <>
       <div className="w-full bg-[#A6A6A6] h-full pt-10">
         <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
-          <div className="flex"> {/* basis-1/4 */}
+          <div className="flex">
             <div className="flex-1 m-4">
               <OrderMonthBarChart />
             </div>
@@ -39,9 +39,9 @@ function OrderManagement() {
               <OrderCityBarChart />
             </div>
           </div>
-          <div className="h-[25%] p-2"> {/* basis-3/4 */}
+          <div className="h-[25%] p-2">
             <div className="flex-row h-[85%]">
-              <div className="flex justify-between"> {/* basis-2/12 */}
+              <div className="flex justify-between">
                 <div className="flex">
                   <Date className="p-1" />
                   <button className={`${buttonStyle} my-2`}>
@@ -60,7 +60,7 @@ function OrderManagement() {
                   </button>
                 </div>
               </div>
-              <div className="flex overflow-auto h-[230%] mt-2"> {/* basis-10/12 */}
+              <div className="flex overflow-auto h-[230%] mt-2">
                 <table className="border-2 border-collapse mr-1 whitespace-nowrap">
                   <thead>
                     <tr>

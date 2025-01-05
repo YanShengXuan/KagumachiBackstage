@@ -5,6 +5,7 @@ import "./App.css";
 
 import FinancialManagement from "./pages/FinancialManagement.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
+import SupplierManagement from "./pages/SupplierManagement.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="homepage" element={<HomePage />} />
           <Route path="orderManagement" element={<OrderManagement />} />
           <Route path="financialManagement" element={<FinancialManagement />} />
+          <Route path="suppliermanagement" element={<SupplierManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>

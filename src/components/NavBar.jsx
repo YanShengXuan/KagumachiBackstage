@@ -30,7 +30,6 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("會員管理")}
               >
-
                 <Link to="memberpage">會員管理</Link>
               </button>
               <button
@@ -59,12 +58,12 @@ const Navbar = () => {
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
-                  activeTab === "庫存/倉儲" ? "bg-color1" : "bg-color2"
+                  activeTab === "廠商管理" ? "bg-color1" : "bg-color2"
                 }`}
-                onClick={() => openPage("庫存/倉儲")}
+                onClick={() => openPage("廠商管理")}
               >
-                庫存/倉儲
-                <Link></Link>
+                廠商管理
+                <Link to="suppliermanagement"></Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
@@ -81,7 +80,6 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("數據/報表")}
               >
-                
                 <Link to="incomeStatement">數據/報表</Link>
               </button>
               <button

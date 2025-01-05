@@ -10,9 +10,9 @@ const Navbar = () => {
   };
   return (
     <>
-      <div className="bg-color3">
-        <div className="flex p-10 rounded-xl">
-          <div className="bg-color2 p-4 rounded-xl w-[20vw] h-[95vh] ">
+      <div className="bg-color3 h-screen">
+        <div className="flex p-10 rounded-xl ">
+          <div className="bg-color2 p-4 rounded-xl w-[20vw] h-[100%] ">
             <div className=" bg-color2 p-2 flex-col flex-wrap text-center">
               <button
                 className={`rounded-3xl  text-black py-5 px-4 bg-color2 text-3xl ${
@@ -21,45 +21,45 @@ const Navbar = () => {
                 onClick={() => openPage("主頁")}
               >
                 <h1 className="text-4xl  font-bold text-gray-800 italic text-center font-poppins">
-                  Kagu machi
+                  <Link to="testone">Kagu machi</Link>
                 </h1>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1   text-3xl ${
-                  activeTab === "會員管理" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1   text-2xl ${
+                  activeTab === "會員管理" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("會員管理")}
               >
-                會員管理
-                <Link></Link>
+
+                <Link to="memberpage">會員管理</Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "商品管理" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "商品管理" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("商品管理")}
               >
-                商品管理
+                <Link to="productspage">商品管理</Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "訂單管理" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "訂單管理" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("訂單管理")}
               >
                 <Link to="orderManagement">訂單管理</Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "財務管理" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "財務管理" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("財務管理")}
               >
                 <Link to="financialManagement">財務管理</Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "庫存/倉儲" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "庫存/倉儲" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("庫存/倉儲")}
               >
@@ -67,8 +67,8 @@ const Navbar = () => {
                 <Link></Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "行銷/促銷" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "行銷/促銷" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("行銷/促銷")}
               >
@@ -76,31 +76,37 @@ const Navbar = () => {
                 <Link></Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === "數據/報表" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "數據/報表" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("數據/報表")}
               >
-                數據/報表
-                <Link></Link>
+                
+                <Link to="incomeStatement">數據/報表</Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1  text-3xl ${
-                  activeTab === " 客服系統" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "配送/物流" ? "bg-color1" : "bg-color2"
+                }`}
+                onClick={() => openPage("配送/物流")}
+              >
+                <Link to="ship">配送/物流</Link>
+              </button>
+              <button
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
+                  activeTab === "客服系統" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("客服系統")}
               >
-                客服系統
-                <Link></Link>
+                <Link to="chat">客服系統</Link>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-5 px-4 hover:text-white hover:bg-color1 text-3xl ${
-                  activeTab === "設定" ? "bg-color2" : "bg-color2"
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1 text-2xl ${
+                  activeTab === "設定" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("設定")}
               >
-                設定
-                <Link></Link>
+                <Link to="setting">設定</Link>
               </button>
             </div>
           </div>

@@ -33,6 +33,7 @@ function Date() {
             dateFormat="yyyy/MM/dd"
             selectsStart
             placeholderText="選擇開始日期"
+            className="rounded-xl"
           />
         </div>
         <div className="ml-2">
@@ -47,6 +48,7 @@ function Date() {
             isClearable
             placeholderText="選擇結束日期"
             minDate={startDate}
+            className="rounded-xl"
           />
         </div>
       </div>

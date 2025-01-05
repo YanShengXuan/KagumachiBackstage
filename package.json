@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@jridgewell/sourcemap-codec": "^1.4.8",
     "@rollup/plugin-inject": "^4.0.0",
@@ -35,6 +34,7 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",

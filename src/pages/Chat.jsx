@@ -12,6 +12,7 @@ const Chat = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const stompClientRef = useRef(null);
+  const chatWindowRef = useRef(null);
 
   useEffect(() => {
     const client = new Client({
@@ -30,20 +31,32 @@ const Chat = () => {
         client.subscribe("/topic/users", (messageOutput) => {
           const usersList = JSON.parse(messageOutput.body);
           console.log("Received users from server:", usersList);
-          setUsers(usersList.map((id) => ({ id, name: `User ${id}` })));
+          setUsers(usersList.map((id) => ({ id, name: `user ${id}` })));
         });
 
-        client.subscribe("/topic/messages/" + managerMemberId, (messageOutput) => {
-          const message = JSON.parse(messageOutput.body);
-          console.log("Received message from server:", message);
-          if (message.receiverid === managerMemberId || message.senderid === managerMemberId) {
-            setMessages((prevMessages) => [...prevMessages, message]);
-            if (!users.some((user) => user.id === message.senderid) && message.senderid !== "0") {
-              console.log("Adding user to list:", message.senderid);
-              setUsers((prevUsers) => [...prevUsers, { id: message.senderid, name: `User ${message.senderid}` }]);
+        client.subscribe(
+          "/topic/messages/" + managerMemberId,
+          (messageOutput) => {
+            const message = JSON.parse(messageOutput.body);
+            console.log("Received message from server:", message);
+            if (
+              message.receiverid === managerMemberId ||
+              message.senderid === managerMemberId
+            ) {
+              setMessages((prevMessages) => [...prevMessages, message]);
+              if (
+                !users.some((user) => user.id === message.senderid) &&
+                message.senderid !== "0"
+              ) {
+                console.log("Adding user to list:", message.senderid);
+                setUsers((prevUsers) => [
+                  ...prevUsers,
+                  { id: message.senderid, name: `User ${message.senderid}` },
+                ]);
+              }
             }
           }
-        });
+        );
 
         client.subscribe("/topic/historyBack", (messageOutput) => {
           const historyMessages = JSON.parse(messageOutput.body);
@@ -75,6 +88,12 @@ const Chat = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollToBottom();
+    }
+  }, [messages]);
+
   const sendMessage = () => {
     if (stompClientRef.current && stompClientRef.current.connected) {
       const message = {
@@ -87,7 +106,9 @@ const Chat = () => {
         destination: "/app/message",
         body: JSON.stringify(message),
       });
-      setMessages((prevMessages) => [...prevMessages, message].sort((a, b) => a.timestamp - b.timestamp));
+      setMessages((prevMessages) =>
+        [...prevMessages, message].sort((a, b) => a.timestamp - b.timestamp)
+      );
       setInput("");
     } else {
       console.error("The connection has not been established yet");
@@ -99,45 +120,57 @@ const Chat = () => {
     setMessages([]);
     stompClientRef.current.publish({
       destination: "/app/historyBack",
-      body: JSON.stringify({ senderid: managerMemberId, receiverid: user.id.toString() }),
+      body: JSON.stringify({
+        senderid: managerMemberId,
+        receiverid: user.id.toString(),
+      }),
     });
   };
 
   return (
-    <div className="p-5 flex">
-      <div className="w-[20%] border-r border-gray-300">
-        <h2 className="text-lg font-bold mb-4">Users</h2>
-        <ul>
-          {users.map((user) => (
-            <li
-              key={user.id}
-              className={`p-2 cursor-pointer ${selectedUser && selectedUser.id === user.id ? "bg-gray-300" : ""}`}
-              onClick={() => handleUserClick(user)}
+      <div className="p-8 flex mt-[5rem]">
+        <div className="w-[20%] pr-2">
+          <h2 className="text-lg font-bold mb-4">會員訊息</h2>
+          <ul>
+            {users.map((user) => (
+              <li
+                key={user.id}
+                className={`p-2 cursor-pointer ${
+                  selectedUser && selectedUser.id === user.id
+                    ? "text-blue-500 border rounded-md"
+                    : ""
+                }`}
+                onClick={() => handleUserClick(user)}
+              >
+                {user.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="w-[80%] flex flex-col justify-center">
+          <ChatWindow
+            ref={chatWindowRef}
+            messages={messages}
+            selectedUser={selectedUser}
+            managerMemberId={managerMemberId}
+          />
+          <Input.TextArea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            rows={4}
+            placeholder="請輸入訊息"
+            className="mb-2"
+          />
+          <div className="flex justify-center">
+            <button
+              className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
+              onClick={sendMessage}
             >
-              {user.name}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="w-[80%] flex flex-col justify-center">
-        <ChatWindow messages={messages} selectedUser={selectedUser} managerMemberId={managerMemberId} />
-        <Input.TextArea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          rows={4}
-          placeholder="請輸入訊息"
-          className="mb-2"
-        />
-        <div className="flex justify-center">
-          <button
-            className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
-            onClick={sendMessage}
-          >
-            確認送出
-          </button>
+              確認送出
+            </button>
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

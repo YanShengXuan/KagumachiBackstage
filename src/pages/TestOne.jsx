@@ -1,5 +1,6 @@
 import React from 'react'
 import ChartOne from '../components/ChartOne'
+import ChartFour from '../components/ChartFour'
 
 const TestOne = () => {
   return (
@@ -8,7 +9,7 @@ const TestOne = () => {
       {/* 會員新增數量 */}
       <div className="bg-color2 rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4 ">會員新增數量</h3>
-        <div className="h-32 bg-gray-200 flex items-center justify-center text-gray-500 ">
+        <div className="h-32 bg-color2 flex items-center justify-center text-gray-500 ">
           <ChartOne />
         </div>
       </div>
@@ -31,15 +32,18 @@ const TestOne = () => {
         <p className="text-gray-700">總收入: <span className="font-semibold">1,000,000</span></p>
         <p className="text-gray-700">總支出: <span className="font-semibold">5,000</span></p>
         <p className="text-gray-700">利潤: <span className="font-semibold">5,000,000</span></p>
-
+        <div className="bg-red-500 h-4 rounded-full text-xs text-center text-white" style={{ width: "80%" }}>
+            80%
+        </div>
+        {/* <progress className="bg-red-500 h-4 rounded-full text-xs text-center text-white" max="100" value="80" style={{backgroundcolor:"rgb(250, 8, 8)",width: "100%" }} >80%</progress> */}
       </div>
 
       {/* 需補貨商品 */}
-      <div className="bg-color2 rounded-lg shadow p-4 col-span-2">
+      <div className="bg-color2 rounded-lg shadow p-4 col-span-2 ">
         <h3 className="text-lg font-semibold mb-4">需補貨商品</h3>
-        <table className="table-auto w-full text-left border-collapse">
+        <table className="table-auto w-full text-left border-collapse ">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-color2 border-black">
               <th className="px-4 py-2">產品編號</th>
               <th className="px-4 py-2">目前庫存</th>
               <th className="px-4 py-2">低於庫存數量</th>
@@ -52,7 +56,21 @@ const TestOne = () => {
               <td className="border px-4 py-2">101</td>
               <td className="border px-4 py-2">5</td>
               <td className="border px-4 py-2">10</td>
-              <td className="border px-4 py-2">XX公司</td>
+              <td className="border px-4 py-2">布萊德大公司</td>
+              <td className="border px-4 py-2">123-4567</td>
+            </tr>
+            <tr>
+              <td className="border px-4 py-2">101</td>
+              <td className="border px-4 py-2">5</td>
+              <td className="border px-4 py-2">10</td>
+              <td className="border px-4 py-2">布萊德大公司</td>
+              <td className="border px-4 py-2">123-4567</td>
+            </tr>
+            <tr>
+              <td className="border px-4 py-2">101</td>
+              <td className="border px-4 py-2">5</td>
+              <td className="border px-4 py-2">10</td>
+              <td className="border px-4 py-2">布萊德大公司</td>
               <td className="border px-4 py-2">123-4567</td>
             </tr>
           </tbody>
@@ -63,8 +81,7 @@ const TestOne = () => {
       <div className="bg-color2 rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4">客戶投訴</h3>
         <ul className="list-disc ml-6 space-y-1 text-gray-700">
-          <li>1. 投訴內容...</li>
-          <li>2. 投訴內容...</li>
+          <li>1.不給投訴</li>
         </ul>
       </div>
 
@@ -72,16 +89,16 @@ const TestOne = () => {
       <div className="bg-color2 rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4">目前優惠活動</h3>
         <ul className="list-disc ml-6 space-y-1 text-gray-700">
-          <li>活動 1</li>
-          <li>活動 2</li>
+          <li>全館九折</li>
+          <li>滿千送百</li>
         </ul>
       </div>
 
       {/* 今日訂單數量 */}
       <div className="bg-color2 rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4">今日訂單數量</h3>
-        <div className="h-32 bg-gray-200 flex items-center justify-center text-gray-500">
-          [圖表]
+        <div className="h-32 bg-color2 flex items-center justify-center text-gray-500">
+          < ChartFour />
         </div>
       </div>
 
@@ -89,8 +106,8 @@ const TestOne = () => {
       <div className="bg-color2 rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4">系統通知</h3>
         <ul className="list-disc ml-6 space-y-1 text-gray-700">
-          <li>通知 1</li>
-          <li>通知 2</li>
+          <li>目前網站維修中</li>
+          <li>預計2/19前會修好</li>
         </ul>
       </div>
     </div>

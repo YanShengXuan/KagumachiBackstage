@@ -13,6 +13,8 @@ import Categories from "./pages/Categories.jsx";
 import Chat from "./pages/Chat";
 import "./App.css";
 import SupplierManagement from "./pages/SupplierManagement.jsx";
+import Sales from "./pages/Sales.jsx";
+import SalesforClasses from "./pages/SalesforClasses.jsx";
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
           <Route path="categories" element={<Categories />} />
           <Route path="chat" element={<Chat />} />
           <Route path="suppliermanagement" element={<SupplierManagement />} />
+          <Route path="sales" element={<Sales />} />
+          <Route path="salesforclasses" element={<SalesforClasses />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -62,8 +62,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("廠商管理")}
               >
-                廠商管理
-                <Link to="suppliermanagement"></Link>
+                <Link to="suppliermanagement">廠商管理</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
@@ -71,8 +70,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("行銷/促銷")}
               >
-                行銷/促銷
-                <Link></Link>
+                <Link to="sales">行銷/促銷</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${

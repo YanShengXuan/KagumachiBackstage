@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
     return (
-        <div className='flex h-screen'>
-            <div className='w-[20%] h-[100%] fixed'>
+        <div className='flex'>
+            <div className='w-[15%] fixed'>
                 <Navbar />
             </div>
-            <div className='ml-[20%] w-[80%]' >
+            <div className='ml-[15%] w-[85%]' >
                 <Outlet />
             </div>
         </div>

@@ -1,8 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import updateLocale from "dayjs/plugin/updateLocale";
 
-const ChatWindow = ({ messages, selectedUser, managerMemberId }) => {
+dayjs.extend(customParseFormat);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("en", {
+  meridiem: (hour) => {
+    if (hour < 12) {
+      return "上午";
+    } else {
+      return "下午";
+    }
+  },
+});
+
+const ChatWindow = forwardRef(({ messages, selectedUser, managerMemberId }, ref) => {
   const [filteredMessages, setFilteredMessages] = useState([]);
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     const filterAndSortMessages = () => {
@@ -27,20 +44,74 @@ const ChatWindow = ({ messages, selectedUser, managerMemberId }) => {
     filterAndSortMessages();
   }, [messages, selectedUser, managerMemberId]);
 
-  return (
-    <div className="w-full mb-5 h-96 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]">
-      {filteredMessages.map((msg) => (
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [filteredMessages]);
+
+  useImperativeHandle(ref, () => ({
+    scrollToBottom: () => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    }
+  }));
+
+  const formatTime = (timestamp) => {
+    return dayjs(timestamp).format("A hh:mm");
+  };
+
+  const formatDate = (timestamp) => {
+    return dayjs(timestamp).format("YYYY-MM-DD");
+  };
+
+  const renderMessagesWithDate = () => {
+    const renderedMessages = [];
+    let lastDate = null;
+
+    filteredMessages.forEach((msg, index) => {
+      const currentDate = formatDate(msg.timestamp);
+      if (currentDate !== lastDate) {
+        renderedMessages.push(
+          <div key={`date-${index}`} className="text-center text-gray-500 my-2">
+            {currentDate}
+          </div>
+        );
+        lastDate = currentDate;
+      }
+
+      const isManagerSender = parseInt(msg.senderid, 10) === parseInt(managerMemberId, 10);
+      renderedMessages.push(
         <div
           key={uuidv4()} // 使用 uuid 生成唯一的 key
-          className={`mb-2 p-3 rounded break-words whitespace-pre-wrap flex ${parseInt(msg.senderid, 10) === parseInt(managerMemberId, 10) ? "justify-end" : "justify-start"}`}
+          className={`mb-2 flex ${isManagerSender ? "justify-end" : "justify-start"}`}
         >
-          <div className={`${parseInt(msg.senderid, 10) === parseInt(managerMemberId, 10) ? "bg-[#E0F2FC] text-right" : "bg-[#FBDCEA] text-left"} p-3 rounded-lg`}>
+          <div
+            className={`relative p-3 rounded break-words whitespace-pre-wrap ${isManagerSender ? "bg-[#E0F2FC] text-right" : "bg-[#FBDCEA] text-left"} rounded-lg`}
+          >
             {msg.content}
+            <div
+              className={`absolute text-xs text-gray-500 bottom-[0.2rem] ${isManagerSender ? "left-[-4rem]" : "right-[-4rem]"}`}
+            >
+              {formatTime(msg.timestamp)}
+            </div>
           </div>
         </div>
-      ))}
+      );
+    });
+
+    return renderedMessages;
+  };
+
+  return (
+    <div
+      ref={chatContainerRef}
+      className="w-full mb-5 h-96 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]"
+    >
+      {renderMessagesWithDate()}
     </div>
   );
-};
+});
 
 export default ChatWindow;

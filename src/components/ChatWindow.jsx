@@ -84,15 +84,15 @@ const ChatWindow = forwardRef(({ messages, selectedUser, managerMemberId }, ref)
       const isManagerSender = parseInt(msg.senderid, 10) === parseInt(managerMemberId, 10);
       renderedMessages.push(
         <div
-          key={uuidv4()} // 使用 uuid 生成唯一的 key
-          className={`mb-2 flex ${isManagerSender ? "justify-end" : "justify-start"}`}
+          key={uuidv4()}
+          className={`mt-3 flex ${isManagerSender ? "justify-end" : "justify-start"}`}
         >
           <div
-            className={`relative p-3 rounded break-words whitespace-pre-wrap ${isManagerSender ? "bg-[#E0F2FC] text-right" : "bg-[#FBDCEA] text-left"} rounded-lg`}
+            className={`text-lg text-[#202020] font-chat relative p-3 rounded break-words whitespace-pre-wrap ${isManagerSender ? "bg-[#E0F2FC] text-right" : "bg-[#FBDCEA] text-left"} rounded-lg`}
           >
             {msg.content}
             <div
-              className={`absolute text-xs text-gray-500 bottom-[0.2rem] ${isManagerSender ? "left-[-4rem]" : "right-[-4rem]"}`}
+              className={`absolute text-xs font-chat text-gray-500 bottom-[0.2rem] ${isManagerSender ? "left-[-4.5rem]" : "right-[-4.5rem]"}`}
             >
               {formatTime(msg.timestamp)}
             </div>
@@ -107,7 +107,7 @@ const ChatWindow = forwardRef(({ messages, selectedUser, managerMemberId }, ref)
   return (
     <div
       ref={chatContainerRef}
-      className="w-full mb-5 h-96 overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]"
+      className="w-full mb-5 h-[30rem] overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]"
     >
       {renderMessagesWithDate()}
     </div>

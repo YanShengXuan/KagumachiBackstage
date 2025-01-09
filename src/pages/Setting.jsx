@@ -252,30 +252,32 @@ const Setting = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">網站設定</h1>
-      <Form form={form} component={false}>
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          bordered
-          dataSource={dataSource}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={false}
-          scroll={{ y: "calc(100vh - 200px)" }}
-        />
-      </Form>
-      <Modal
-        open={previewVisible}
-        footer={null}
-        onCancel={() => setPreviewVisible(false)}
-      >
-        <img alt="logo" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
+    <div className="w-full bg-[#A6A6A6] h-full pt-10">
+      <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
+        <h1 className="text-2xl font-bold mb-4">網站設定</h1>
+        <Form form={form} component={false}>
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            bordered
+            dataSource={dataSource}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={false}
+            scroll={{ y: "calc(100vh - 200px)" }}
+          />
+        </Form>
+        <Modal
+          open={previewVisible}
+          footer={null}
+          onCancel={() => setPreviewVisible(false)}
+        >
+          <img alt="logo" style={{ width: "100%" }} src={previewImage} />
+        </Modal>
+      </div>
     </div>
   );
 };

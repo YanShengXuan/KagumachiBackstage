@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <>
       <div className="bg-color3 h-screen">
-        <div className="flex p-10 rounded-xl ">
+        <div className="flex px-5 py-10  rounded-xl h-full ">
           <div className="bg-color2 p-4 rounded-xl w-[20vw] h-[100%] ">
             <div className=" bg-color2 p-2 flex-col flex-wrap text-center">
               <button
@@ -38,7 +38,8 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("商品管理")}
               >
-                <Link to="productspage">商品管理</Link>
+                {/*<Link to="productspage">商品管理</Link>*/}
+                商品管理
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
@@ -62,8 +63,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("廠商管理")}
               >
-                廠商管理
-                <Link to="suppliermanagement"></Link>
+                <Link to="suppliermanagement">廠商管理</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${
@@ -71,8 +71,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("行銷/促銷")}
               >
-                行銷/促銷
-                <Link></Link>
+                <Link to="sales">行銷/促銷</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${

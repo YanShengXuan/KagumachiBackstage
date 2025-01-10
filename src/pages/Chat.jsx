@@ -64,7 +64,6 @@ const Chat = () => {
           setMessages(historyMessages);
         });
 
-        // 請求用戶列表
         client.publish({
           destination: "/app/users",
         });
@@ -128,49 +127,53 @@ const Chat = () => {
   };
 
   return (
-      <div className="p-8 flex mt-[5rem]">
-        <div className="w-[20%] pr-2">
-          <h2 className="text-lg font-bold mb-4">會員訊息</h2>
-          <ul>
-            {users.map((user) => (
-              <li
-                key={user.id}
-                className={`p-2 cursor-pointer ${
-                  selectedUser && selectedUser.id === user.id
-                    ? "text-blue-500 border rounded-md"
-                    : ""
-                }`}
-                onClick={() => handleUserClick(user)}
+    <div className="w-full bg-[#A6A6A6] h-full pt-10">
+      <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
+        <div className="p-8 flex">
+          <div className="w-[15%] pr-2">
+            <h2 className="text-lg font-bold mb-4 pl-7">會員訊息</h2>
+            <ul className="pr-8">
+              {users.map((user) => (
+                <li
+                  key={user.id}
+                  className={`p-3 mb-2 cursor-pointer text-[#000] ${
+                    selectedUser && selectedUser.id === user.id
+                      ? "bg-[#535759] rounded-xl text-[#FCF6F0]"
+                      : ""
+                  } hover:bg-[#535759] hover:rounded-xl hover:text-[#fff]`}
+                  onClick={() => handleUserClick(user)}
+                >
+                  {user.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="w-[85%] flex flex-col">
+            <ChatWindow
+              ref={chatWindowRef}
+              messages={messages}
+              selectedUser={selectedUser}
+              managerMemberId={managerMemberId}
+            />
+            <Input.TextArea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              rows={4}
+              placeholder="請輸入訊息"
+              className="mb-2"
+            />
+            <div className="flex justify-center">
+              <button
+                className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
+                onClick={sendMessage}
               >
-                {user.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="w-[80%] flex flex-col justify-center">
-          <ChatWindow
-            ref={chatWindowRef}
-            messages={messages}
-            selectedUser={selectedUser}
-            managerMemberId={managerMemberId}
-          />
-          <Input.TextArea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            rows={4}
-            placeholder="請輸入訊息"
-            className="mb-2"
-          />
-          <div className="flex justify-center">
-            <button
-              className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
-              onClick={sendMessage}
-            >
-              確認送出
-            </button>
+                確認送出
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

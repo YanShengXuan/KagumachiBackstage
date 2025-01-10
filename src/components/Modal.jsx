@@ -1,5 +1,8 @@
 // eslint-disable-next-line react/prop-types
 function Modal({ onClose }) {
+  const buttonstyle =
+    "mt-1 bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[20%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
+
   return (
     <div className=" fixed left-0 top-0 w-full h-full bg-black bg-opacity-80 flex justify-center items-center">
       <div className="bg-white p-5 shadow-sm shadow-stone-200 gap-3 text-black relative rounded">
@@ -34,9 +37,7 @@ function Modal({ onClose }) {
           <br />
         </div>
         <div className="flex justify-center items-center mt-4">
-          <button className="px-4 py-2 bg-black text-white rounded shadow hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500">
-            送出
-          </button>
+          <button className={buttonstyle}>送出</button>
         </div>
       </div>
     </div>

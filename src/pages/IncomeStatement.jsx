@@ -14,17 +14,15 @@ const IncomeStatement = () => {
     };
 
     return (
-        <div className=" bg-color3 min-h-screen">
-            <div className="flex p-10 rounded-xl">
-                <div className="p-6 bg-color2 rounded-xl w-[95vw] h-[95vh]">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-4">數據/報表</h1>
-                        <YearQuarterSelector onSelectionChange={handleSelectionChange} />
-                    <div className="mt-6">
-                        <Report year={year} quarter={quarter} />
-                    </div>
-                    <div className="mt-6">
-                        <GaugeChart />
-                    </div>
+        <div className="w-full bg-[#A6A6A6] h-full pt-10">
+            <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">數據/報表</h1>
+                <YearQuarterSelector onSelectionChange={handleSelectionChange} />
+                <div className="mt-6">
+                    <Report year={year} quarter={quarter} />
+                </div>
+                <div className="mt-6">
+                    <GaugeChart />
                 </div>
             </div>
         </div>

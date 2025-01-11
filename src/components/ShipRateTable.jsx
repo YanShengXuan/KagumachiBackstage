@@ -154,7 +154,7 @@ const ShipRateTable = () => {
         <Table
           dataSource={shippingRates}
           columns={columns}
-          pagination={{ pageSize: 5 }}
+          pagination={{ pageSize: 8 }}
         />
       </Form>
     </div>

@@ -194,12 +194,12 @@ const Setting = () => {
         return editable ? (
           <span>
             <Button onClick={() => save(record.key)} className="mr-2">
-              Save
+              儲存
             </Button>
-            <Button onClick={cancel}>Cancel</Button>
+            <Button onClick={cancel}>取消</Button>
           </span>
         ) : (
-          <Button onClick={() => edit(record)}>Edit</Button>
+          <Button onClick={() => edit(record)}>編輯</Button>
         );
       },
     },

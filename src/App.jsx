@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 import HomePage from "./pages/HomePage";
 import Ship from "./pages/Ship";
+import ShipRateTable from "./components/ShipRateTable";
+import ShipOrderTable from "./components/ShipOrderTable";
 import Setting from "./pages/Setting";
 import TestOne from "./pages/TestOne.jsx";
 import FinancialManagement from "./pages/FinancialManagement.jsx";
@@ -25,7 +27,10 @@ function App() {
           <Route path="homepage" element={<HomePage />} />
           <Route path="orderManagement" element={<OrderManagement />} />
           <Route path="financialManagement" element={<FinancialManagement />} />
-          <Route path="ship" element={<Ship />} />
+          <Route path="ship" element={<Ship />} >
+            <Route path="shipratetable" element={<ShipRateTable />} />
+            <Route path="shipordertable" element={<ShipOrderTable />} />
+          </Route>
           <Route path="setting" element={<Setting />} />
           <Route path="incomeStatement" element={<IncomeStatement />} />
           <Route path="testone" element={<TestOne />} />

@@ -138,12 +138,12 @@ const ShipRateTable = () => {
         editingKey === record.key ? (
           <span>
             <Button onClick={() => handleSave(record.key)} className="mr-2">
-              Save
+              儲存
             </Button>
-            <Button onClick={handleCancel}>Cancel</Button>
+            <Button onClick={handleCancel}>取消</Button>
           </span>
         ) : (
-          <Button onClick={() => handleEdit(record)}>Edit</Button>
+          <Button onClick={() => handleEdit(record)}>編輯</Button>
         ),
     },
   ];

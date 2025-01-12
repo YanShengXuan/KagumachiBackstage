@@ -60,7 +60,7 @@ function OrderManagement() {
                   </button>
                 </div>
               </div>
-              <div className="flex overflow-auto h-[230%] mt-2">
+              <div className="flex overflow-auto h-[220%] mt-2">
                 <table className="border-2 border-collapse mr-1 whitespace-nowrap">
                   <thead>
                     <tr>

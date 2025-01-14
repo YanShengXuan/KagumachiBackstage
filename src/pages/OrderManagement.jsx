@@ -1,7 +1,7 @@
 import { useState } from "react";
 import OrderMonthBarChart from "../components/OrderMonthBarChart.jsx";
 import OrderCityBarChart from "../components/OrderCityBarChart.jsx";
-import Dates from "../components/Date.jsx";
+import Dates from "../components/Dates.jsx";
 
 function OrderManagement() {
   const buttonStyle =

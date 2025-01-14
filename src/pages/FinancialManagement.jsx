@@ -109,41 +109,45 @@ function FinancialManagement() {
       <div className="w-full bg-[#A6A6A6] h-full pt-10">
         <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
           <div className="flex flex-col ">
-            <div className="flex">
-              <Date setStartDate={setStartDate} setEndDate={setEndDate} />
-              <button
-                className={
-                  startDate == null || endDate == null
-                    ? `${buttonStyle} cursor-not-allowed`
-                    : `${buttonStyle}`
-                }
-                onClick={financeBetween}
-                disabled={startDate == null || endDate == null}
-              >
-                確認
-              </button>
-              <button
-                className={
-                  financeData.length > 0
-                    ? `ml-8 ${buttonStyle}`
-                    : `ml-8 ${buttonStyle} cursor-not-allowed`
-                }
-                disabled={financeData.length <= 0}
-                onClick={financeRangeExpenditure}
-              >
-                支出篩選
-              </button>
-              <button
-                className={
-                  financeData.length > 0
-                    ? `ml-8 ${buttonStyle}`
-                    : `ml-8 ${buttonStyle} cursor-not-allowed`
-                }
-                disabled={financeData.length <= 0}
-                onClick={financeRangeIncome}
-              >
-                收入篩選
-              </button>
+            <div className="flex justify-between">
+              <div className="flex">
+                <Date setStartDate={setStartDate} setEndDate={setEndDate} />
+                <button
+                  className={
+                    startDate == null || endDate == null
+                      ? `${buttonStyle} cursor-not-allowed`
+                      : `${buttonStyle}`
+                  }
+                  onClick={financeBetween}
+                  disabled={startDate == null || endDate == null}
+                >
+                  確認
+                </button>
+              </div>
+              <div className="flex">
+                <button
+                  className={
+                    financeData.length > 0
+                      ? `ml-8 ${buttonStyle}`
+                      : `ml-8 ${buttonStyle} cursor-not-allowed`
+                  }
+                  disabled={financeData.length <= 0}
+                  onClick={financeRangeExpenditure}
+                >
+                  支出篩選
+                </button>
+                <button
+                  className={
+                    financeData.length > 0
+                      ? `ml-8 ${buttonStyle}`
+                      : `ml-8 ${buttonStyle} cursor-not-allowed`
+                  }
+                  disabled={financeData.length <= 0}
+                  onClick={financeRangeIncome}
+                >
+                  收入篩選
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex justify-center overflow-y-auto h-[80%]">

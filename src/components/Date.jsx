@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
-function Date() {
+import "../components/Date.css"
+
+function Date(props) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   const formatStartDate = startDate ? format(startDate, "yyyy-MM-dd") : null;
   const formatEndtDate = endDate ? format(endDate, "yyyy-MM-dd") : null;
+  useEffect(()=>{
+    props.setStartDate(formatStartDate);
+  },[startDate])
+  useEffect(()=>{
+    props.setEndDate(formatEndtDate);
+  },[endDate])
 
   const startDateChange = (date) => {
     setStartDate(date);
@@ -30,7 +38,10 @@ function Date() {
             startDate={startDate}
             endDate={endDate}
             showIcon
-            dateFormat="yyyy/MM/dd"
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            dateFormat="yyyy-MM-dd"
             selectsStart
             placeholderText="選擇開始日期"
             className="rounded-xl"
@@ -43,7 +54,10 @@ function Date() {
             startDate={startDate}
             endDate={endDate}
             showIcon
-            dateFormat="yyyy/MM/dd"
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            dateFormat="yyyy-MM-dd"
             selectsEnd
             isClearable
             placeholderText="選擇結束日期"

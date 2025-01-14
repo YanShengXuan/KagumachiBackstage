@@ -1,7 +1,7 @@
 import { useState } from "react";
 import OrderMonthBarChart from "../components/OrderMonthBarChart.jsx";
 import OrderCityBarChart from "../components/OrderCityBarChart.jsx";
-import Date from "../components/Date.jsx";
+import Dates from "../components/Date.jsx";
 
 function OrderManagement() {
   const buttonStyle =
@@ -46,7 +46,7 @@ function OrderManagement() {
             <div className="flex-row h-[85%]">
               <div className="flex justify-between">
                 <div className="flex">
-                  <Date
+                  <Dates
                     className="p-1"
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}

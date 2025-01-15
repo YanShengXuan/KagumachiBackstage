@@ -94,6 +94,10 @@ const Chat = () => {
   }, [messages]);
 
   const sendMessage = () => {
+    if (input.trim() === "") {
+      // console.error("訊息不可為空");
+      return;
+    }
     if (stompClientRef.current && stompClientRef.current.connected) {
       const message = {
         senderid: managerMemberId,

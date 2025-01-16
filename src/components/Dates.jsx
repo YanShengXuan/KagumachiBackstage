@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
-import "../components/Date.css"
+import "../components/Dates.css"
 
-function Date(props) {
+function FinancialManagementDate(props) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -70,4 +70,4 @@ function Date(props) {
   );
 }
 
-export default Date;
+export default FinancialManagementDate;

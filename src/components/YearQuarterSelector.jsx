@@ -23,7 +23,7 @@ const YearQuarterSelector = ({ onSelectionChange }) => {
                     value={year}
                     onChange={handleYearChange}
                 >
-                    {[2023, 2024, 2025].map((yr) => (
+                    {[2024, 2025].map((yr) => (
                         <option key={yr} value={yr}>{yr}</option>
                     ))}
                 </select>

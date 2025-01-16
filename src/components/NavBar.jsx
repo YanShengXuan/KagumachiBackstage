@@ -87,7 +87,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("配送/物流")}
               >
-                <Link to="ship">配送/物流</Link>
+                <Link to="ship/shipratetable">配送/物流</Link>
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${

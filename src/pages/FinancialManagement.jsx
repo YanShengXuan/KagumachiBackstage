@@ -44,11 +44,14 @@ function FinancialManagement() {
     item: "支出",
   };
   const [financeData, setFinanceData] = useState([]);
-  const [income, setIncome] = useState([]);
-  // const [income, setIncome] = useState(new Map());
-  const incomeSum = income.reduce((sum, value) => sum + value, 0);
-  const [expenditure, setExpenditure] = useState([]);
-  const expenditureSum = expenditure.reduce((sum, value) => sum + value, 0);
+  const [income, setIncome] = useState(new Map());
+  const incomeSum = [...income].reduce((acc, [key, value]) => {
+    return (acc += value);
+  }, 0);
+  const [expenditure, setExpenditure] = useState(new Map());
+  const expenditureSum = [...expenditure].reduce((acc, [key, value]) => {
+    return (acc += value);
+  }, 0);
   const [isCheck, setIsCheck] = useState(false);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -86,14 +89,15 @@ function FinancialManagement() {
   };
 
   const handleEdit = (id, itemData) => {
-    setFinanceData(financeData.map((data) => (
-      data.financeid  === id ? itemData : data
-    )));
+    setFinanceData(
+      financeData.map((data) => (data.financeid === id ? itemData : data))
+    );
   };
 
   const financeBetweenUrl = "http://localhost:8080/finance/between";
   const financeRangUrl = "http://localhost:8080/finance/item";
   const financeCreateUrl = "http://localhost:8080/finance/create";
+  const financeReviseUrl = "http://localhost:8080/finance/revise";
 
   const financeBetween = () => {
     setIsCheck(true);
@@ -112,8 +116,8 @@ function FinancialManagement() {
         }
       })
       .then((data) => {
-        setIncome([]);
-        setExpenditure([]);
+        setIncome(new Map());
+        setExpenditure(new Map());
         setFinanceData(data);
       })
       .catch((error) => {
@@ -138,7 +142,7 @@ function FinancialManagement() {
         }
       })
       .then((data) => {
-        setIncome([]);
+        setIncome(new Map());
         setFinanceData(data);
       })
       .catch((error) => {
@@ -163,7 +167,7 @@ function FinancialManagement() {
         }
       })
       .then((data) => {
-        setExpenditure([]);
+        setExpenditure(new Map());
         setFinanceData(data);
       })
       .catch((error) => {
@@ -172,7 +176,6 @@ function FinancialManagement() {
   };
 
   const financeCreate = () => {
-    console.log(JSON.stringify(modalData));
     fetch(financeCreateUrl, {
       method: "POST",
       headers: {
@@ -198,6 +201,28 @@ function FinancialManagement() {
       });
   };
 
+  const financeRevise = (props) => {
+    fetch(financeReviseUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(props.formData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error:" + response.status);
+        }
+      })
+      .then(() => {
+        console.log("OK");
+        financeBetween();
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
   return (
     <>
       <div className="w-full bg-[#A6A6A6] h-full pt-10">
@@ -211,12 +236,12 @@ function FinancialManagement() {
                 />
                 <button
                   className={
-                    (startDate == null) | (endDate == null)
-                      ? `${buttonStyle} cursor-not-allowed`
-                      : `${buttonStyle}`
+                    startDate != null | endDate != null
+                      ? `${buttonStyle}`
+                      : `${buttonStyle} cursor-not-allowed`
                   }
                   onClick={financeBetween}
-                  disabled={(startDate == null) | (endDate == null)}
+                  disabled={startDate == null | endDate == null}
                 >
                   確認
                 </button>
@@ -224,22 +249,22 @@ function FinancialManagement() {
               <div className="flex">
                 <button
                   className={
-                    financeData.length != 0
+                    startDate != null | endDate != null
                       ? `ml-8 ${buttonStyle}`
                       : `ml-8 ${buttonStyle} cursor-not-allowed`
                   }
-                  disabled={financeData.length == 0}
+                  disabled={startDate == null | endDate == null}
                   onClick={financeRangeExpenditure}
                 >
                   支出篩選
                 </button>
                 <button
                   className={
-                    financeData.length != 0
+                    startDate != null | endDate != null
                       ? `ml-8 ${buttonStyle}`
                       : `ml-8 ${buttonStyle} cursor-not-allowed`
                   }
-                  disabled={financeData.length == 0}
+                  disabled={startDate == null | endDate == null}
                   onClick={financeRangeIncome}
                 >
                   收入篩選
@@ -274,6 +299,7 @@ function FinancialManagement() {
                     financeBetween={financeBetween}
                     financeData={financeData}
                     handleEdit={handleEdit}
+                    financeRevise={financeRevise}
                   />
                 ))}
               </tbody>

@@ -1,27 +1,14 @@
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import FinanceItemDate from "./FinanceItemDate.jsx";
 
 const tableTdBtnStyle =
   "px-2 my-2 w-20 rounded-xl bg-[rgb(83,87,89)] text-white text-base hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
 const tableTdStyle = "border-2 border-black text-center";
 function FinanceItem(props) {
-  useEffect(() => {
-    if (props.isCheck) {
-      if (props.item == "收入") {
-        props.setIncome((prev) => [...prev, props.money]);
-      } else if (props.item == "支出") {
-        props.setExpenditure((prev) => [...prev, props.money]);
-      }
-    }else{
-      if (props.item == "收入") {
-        props.setIncome((prev) => [...prev, props.money]);
-      } else if (props.item == "支出") {
-        props.setExpenditure((prev) => [...prev, props.money]);
-      }
-    }
-  }, [props.financeData]);
   const [isEdit, setIsEdit] = useState(false);
   const [itemDate, setItemDate] = useState(null);
+  const formatItemDate = itemDate ? format(itemDate, "yyyy-MM-dd") : null;
 
   const [formData, setFormData] = useState({
     financeid: props.id,
@@ -31,25 +18,74 @@ function FinanceItem(props) {
     money: props.money,
   });
 
+  useEffect(() => {
+    setFormData({
+      financeid: props.id,
+      date: formatItemDate,
+      item: props.item,
+      details: props.details,
+      money: props.money,
+    });
+  }, [itemDate]);
+
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: name == "money" ? parseFloat(value) : value}));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name == "money" ? parseFloat(value) : value,
+    }));
   };
 
   const confirmEdit = () => {
+    console.log(formData);
     props.handleEdit(props.id, formData);
+    props.financeRevise({ formData });
     setIsEdit(false);
   };
 
   const cancelEdit = () => {
     setFormData({
+      financeid: props.id,
       date: props.date,
       item: props.item,
       details: props.details,
       money: props.money,
     });
+    console.log(formData.date);
     setIsEdit(false);
   };
+
+  useEffect(() => {
+    if (props.isCheck) {
+      if (props.item == "收入") {
+        props.setIncome((prev) => {
+          const updateMap = new Map(prev);
+          updateMap.set(props.id, props.money);
+          return updateMap;
+        });
+      } else if (props.item == "支出") {
+        props.setExpenditure((prev) => {
+          const updateMap = new Map(prev);
+          updateMap.set(props.id, props.money);
+          return updateMap;
+        });
+      }
+    } else {
+      if (props.item == "收入") {
+        props.setIncome((prev) => {
+          const updateMap = new Map(prev);
+          updateMap.set(props.id, props.money);
+          return updateMap;
+        });
+      } else if (props.item == "支出") {
+        props.setExpenditure((prev) => {
+          const updateMap = new Map(prev);
+          updateMap.set(props.id, props.money);
+          return updateMap;
+        });
+      }
+    }
+  }, [props.financeData]);
 
   return (
     <>

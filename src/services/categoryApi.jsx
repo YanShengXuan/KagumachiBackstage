@@ -1,32 +1,62 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8080/Category";
 
 // Fetch all main categories
-export const fetchMainCategories = () =>
-    fetch(`${BASE_URL}/categories/main`).then((response) => response.json());
+export const fetchMainCategories = async () => {
+    const response = await fetch("http://localhost:8080/Category/getMain");
+    if (!response.ok) throw new Error("Failed to fetch main categories");
+    return response.json();
+};
 
 // Fetch all subcategories for a specific main category
 export const fetchSubCategories = (mainId) =>
-    fetch(`${BASE_URL}/categories/main/${mainId}/sub`).then((response) => response.json());
+    fetch(`${BASE_URL}/getSub?mainCategoryId=${mainId}`).then((response) => response.json());
 
 // Add a new main category
-export const addMainCategory = (data) =>
-    fetch(`${BASE_URL}/categories/main`, {
+export const addMainCategory = async (formData) => {
+    const response = await fetch(`${BASE_URL}/addMain`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    }).then((response) => response.json());
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+    });
 
-// Add a new subcategory
-export const addSubCategory = (data) =>
-    fetch(`${BASE_URL}/categories/sub`, {
+    const text = await response.text();
+    try {
+        return JSON.parse(text); // 確保 JSON 格式正確
+    } catch (error) {
+        console.error("Response is not valid JSON:", text);
+        throw new Error("Invalid JSON response");
+    }
+};
+
+
+export const addSubCategory = async (data) => {
+
+    const response = await fetch(`${BASE_URL}/addSub`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
-    }).then((response) => response.json());
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    const text = await response.text();
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        console.error("API 回應非 JSON 格式:", text);
+        throw new Error("Invalid JSON response from server.");
+    }
+};
 
 // Update an existing main category
 export const updateMainCategory = (mainId, data) =>
-    fetch(`${BASE_URL}/categories/main/${mainId}`, {
+    fetch(`${BASE_URL}/updateMain/${mainId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -34,7 +64,7 @@ export const updateMainCategory = (mainId, data) =>
 
 // Update an existing subcategory
 export const updateSubCategory = (subId, data) =>
-    fetch(`${BASE_URL}/categories/sub/${subId}`, {
+    fetch(`${BASE_URL}/updateSub/${subId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -42,8 +72,8 @@ export const updateSubCategory = (subId, data) =>
 
 // Delete a main category
 export const deleteMainCategory = (mainId) =>
-    fetch(`${BASE_URL}/categories/main/${mainId}`, { method: "DELETE" });
+    fetch(`${BASE_URL}/deleteMain/${mainId}`, { method: "DELETE" });
 
 // Delete a subcategory
 export const deleteSubCategory = (subId) =>
-    fetch(`${BASE_URL}/categories/sub/${subId}`, { method: "DELETE" });
+    fetch(`${BASE_URL}/deleteSub/${subId}`, { method: "DELETE" });

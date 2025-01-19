@@ -1,112 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Table, Input, Button } from "antd";
 import { Link } from "react-router-dom";
-
-// ====== 測試用初始資料，後端可傳回資料後此段將刪除。 ======
-const data = [
-  {
-    key: "1",
-    orderNumber: "241119011501",
-    logisticsCompany: "黑貓宅急便",
-    logisticsNumber: "1002-6790-5761",
-  },
-  {
-    key: "2",
-    orderNumber: "241119011502",
-    logisticsCompany: "宅配通",
-    logisticsNumber: "1212-3434-5656",
-  },
-  {
-    key: "3",
-    orderNumber: "241119011503",
-    logisticsCompany: "嘉里大榮",
-    logisticsNumber: "8787-9090-2121",
-  },
-  {
-    key: "4",
-    orderNumber: "241119011501",
-    logisticsCompany: "黑貓宅急便",
-    logisticsNumber: "1002-6790-5761",
-  },
-  {
-    key: "5",
-    orderNumber: "241119011502",
-    logisticsCompany: "宅配通",
-    logisticsNumber: "1212-3434-5656",
-  },
-  {
-    key: "6",
-    orderNumber: "241119011503",
-    logisticsCompany: "嘉里大榮",
-    logisticsNumber: "8787-9090-2121",
-  },
-  {
-    key: "7",
-    orderNumber: "241119011501",
-    logisticsCompany: "黑貓宅急便",
-    logisticsNumber: "1002-6790-5761",
-  },
-  {
-    key: "8",
-    orderNumber: "241119011502",
-    logisticsCompany: "宅配通",
-    logisticsNumber: "1212-3434-5656",
-  },
-  {
-    key: "9",
-    orderNumber: "241119011503",
-    logisticsCompany: "嘉里大榮",
-    logisticsNumber: "8787-9090-2121",
-  },
-  {
-    key: "10",
-    orderNumber: "241119011501",
-    logisticsCompany: "黑貓宅急便",
-    logisticsNumber: "1002-6790-5761",
-  },
-  {
-    key: "12",
-    orderNumber: "241119011502",
-    logisticsCompany: "宅配通",
-    logisticsNumber: "1212-3434-5656",
-  },
-  {
-    key: "13",
-    orderNumber: "241119011503",
-    logisticsCompany: "嘉里大榮",
-    logisticsNumber: "8787-9090-2121",
-  },
-];
-// ====== 測試用初始資料，後端可傳回資料後此段將刪除。 ======
+import { SearchOutlined } from "@ant-design/icons";
 
 const ShipOrderTable = () => {
-  // ====== 向後端拿初始資料，後端可傳回資料後此段將取消註解。 ======
-  // const [data, setData] = useState([]);
-  //
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch('後端url');
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       const result = await response.json();
-  //       setData(result.map((item, index) => ({ ...item, key: index.toString() })));
-  //     } catch (error) {
-  //       console.error('Error:', error);
-  //     }
-  //   };
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [orderNumber, setOrderNumber] = useState("");
+  const [logisticsNumber, setLogisticsNumber] = useState("");
+  const buttonstyle = "mb-2 bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[7%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
 
-  //   fetchData();
-  // }, []);
-  // ====== 向後端拿初始資料，後端可傳回資料後此段將取消註解。 ======
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/shiporder');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      setData(result.map((item, index) => ({ ...item, key: index.toString() })));
+      setFilteredData(result.map((item, index) => ({ ...item, key: index.toString() })));
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleOrderNumberSearch = () => {
+    const filtered = data.filter(item => 
+      item.orderNumber.includes(orderNumber)
+    );
+    setFilteredData(filtered);
+  };
+
+  const handleLogisticsNumberSearch = () => {
+    const filtered = data.filter(item => 
+      item.logisticsNumber.includes(logisticsNumber)
+    );
+    setFilteredData(filtered);
+  };
 
   const columns = [
     {
       title: "訂單編號",
       dataIndex: "orderNumber",
       key: "orderNumber",
-      render: (text) => <Link to="../orderManagement">{text}</Link>,
+      render: (text) => <Link to="../../orderManagement">{text}</Link>,
+    },
+    {
+      title: "訂購日期",
+      dataIndex: "orderdate",
+      key: "orderdate",
+    },
+    {
+      title: "出貨日期",
+      dataIndex: "deliverydate",
+      key: "deliverydate",
+    },
+    {
+      title: "(預計)送達日期",
+      dataIndex: "estimateddeliverydate",
+      key: "estimateddeliverydate",
     },
     {
       title: "物流公司",
@@ -117,14 +73,45 @@ const ShipOrderTable = () => {
       title: "物流編號",
       dataIndex: "logisticsNumber",
       key: "logisticsNumber",
-    },
+    }
   ];
 
   return (
     <div className="p-4">
+      <div className="mb-4">
+        <label>訂單編號: </label>
+        <Input
+          placeholder="以訂單編號搜尋"
+          value={orderNumber}
+          onChange={(e) => setOrderNumber(e.target.value)}
+          className="w-52 mr-4"
+        />
+        <Button
+          icon={<SearchOutlined />}
+          onClick={handleOrderNumberSearch}
+          className={buttonstyle}
+        >
+          搜尋
+        </Button>
+        <br />
+        <label>物流編號: </label>
+        <Input
+          placeholder="以物流編號搜尋"
+          value={logisticsNumber}
+          onChange={(e) => setLogisticsNumber(e.target.value)}
+          className="w-52 mr-4"
+        />
+        <Button
+          icon={<SearchOutlined />}
+          onClick={handleLogisticsNumberSearch}
+          className={buttonstyle}
+        >
+          搜尋
+        </Button>
+      </div>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         pagination={{ pageSize: 10 }}
       />
     </div>

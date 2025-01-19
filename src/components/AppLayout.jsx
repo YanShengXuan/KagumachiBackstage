@@ -9,7 +9,7 @@ const AppLayout = () => {
             <div className='w-[15%] fixed'>
                 <Navbar />
             </div>
-            <div className='ml-[15%] w-[85%]' >
+            <div className='ml-[15%] w-[90%]' >
                 <Outlet />
             </div>
         </div>

@@ -1,12 +1,15 @@
+import { useState } from "react";
 import OrderMonthBarChart from "../components/OrderMonthBarChart.jsx";
 import OrderCityBarChart from "../components/OrderCityBarChart.jsx";
-import Date from "../components/Date.jsx";
+import Dates from "../components/Dates.jsx";
 
 function OrderManagement() {
   const buttonStyle =
     "px-16 rounded-xl bg-[rgb(83,87,89)] text-white hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
   const tableThStyle = "border-2 border-black text-center text-xl";
   const tableTdStyle = "border-2 border-black text-center text-xl px-6";
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const rows = [];
   for (let i = 0; i < 20; i++) {
     rows.push(
@@ -43,10 +46,12 @@ function OrderManagement() {
             <div className="flex-row h-[85%]">
               <div className="flex justify-between">
                 <div className="flex">
-                  <Date className="p-1" />
-                  <button className={`${buttonStyle} my-2`}>
-                    確認
-                  </button>
+                  <Dates
+                    className="p-1"
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate}
+                  />
+                  <button className={`${buttonStyle} my-2`}>確認</button>
                 </div>
                 <div className="m-2">
                   <button className={`${buttonStyle} mr-2 py-2`}>
@@ -60,7 +65,7 @@ function OrderManagement() {
                   </button>
                 </div>
               </div>
-              <div className="flex overflow-auto h-[230%] mt-2">
+              <div className="flex overflow-auto h-[220%] mt-2">
                 <table className="border-2 border-collapse mr-1 whitespace-nowrap">
                   <thead>
                     <tr>

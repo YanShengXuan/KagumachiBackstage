@@ -11,6 +11,7 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [newMessageUsers, setNewMessageUsers] = useState([]);
   const stompClientRef = useRef(null);
   const chatWindowRef = useRef(null);
 
@@ -54,6 +55,9 @@ const Chat = () => {
                   { id: message.senderid, name: `User ${message.senderid}` },
                 ]);
               }
+              if (!message.isbackread) {
+                setNewMessageUsers((prev) => [...new Set([...prev, message.senderid])]);
+              }
             }
           }
         );
@@ -64,8 +68,21 @@ const Chat = () => {
           setMessages(historyMessages);
         });
 
+        client.subscribe("/topic/unreadBackMessages", (messageOutput) => {
+          const unreadMessages = JSON.parse(messageOutput.body);
+          console.log("Received unread back messages from server:", unreadMessages);
+          const unreadUserIds = unreadMessages.map((message) => message.senderid.toString());
+          setNewMessageUsers(unreadUserIds);
+          console.log("Updated newMessageUsers:", unreadUserIds);
+        });
+
         client.publish({
           destination: "/app/users",
+        });
+
+        client.publish({
+          destination: "/app/unreadBackMessages",
+          body: JSON.stringify(managerMemberId),
         });
       },
       onStompError: (frame) => {
@@ -121,12 +138,17 @@ const Chat = () => {
   const handleUserClick = (user) => {
     setSelectedUser(user);
     setMessages([]);
+    setNewMessageUsers((prev) => prev.filter((id) => id !== user.id));
     stompClientRef.current.publish({
       destination: "/app/historyBack",
       body: JSON.stringify({
         senderid: managerMemberId,
         receiverid: user.id.toString(),
       }),
+    });
+    stompClientRef.current.publish({
+      destination: "/app/markAsReadBack",
+      body: JSON.stringify(user.id),
     });
   };
 
@@ -137,19 +159,26 @@ const Chat = () => {
           <div className="w-[15%] pr-2">
             <h2 className="text-lg font-bold mb-4 pl-7">會員訊息</h2>
             <ul className="pr-8">
-              {users.map((user) => (
-                <li
-                  key={user.id}
-                  className={`p-3 mb-2 cursor-pointer text-[#000] ${
-                    selectedUser && selectedUser.id === user.id
-                      ? "bg-[#535759] rounded-xl text-[#FCF6F0]"
-                      : ""
-                  } hover:bg-[#535759] hover:rounded-xl hover:text-[#fff]`}
-                  onClick={() => handleUserClick(user)}
-                >
-                  {user.name}
-                </li>
-              ))}
+              {users.map((user) => {
+                console.log("Rendering user:", user);
+                console.log("newMessageUsers:", newMessageUsers);
+                return (
+                  <li
+                    key={user.id}
+                    className={`p-3 mb-2 cursor-pointer text-[#000] ${
+                      selectedUser && selectedUser.id === user.id
+                        ? "bg-[#535759] rounded-xl text-[#FCF6F0]"
+                        : "bg-[rgb(216,216,216)]"
+                    } hover:bg-[#535759] hover:rounded-xl hover:text-[#fff] relative`}
+                    onClick={() => handleUserClick(user)}
+                  >
+                    {user.name}
+                    {newMessageUsers.includes(user.id) && (
+                      <span className="absolute top-[0.5rem] right-[1rem] text-xl text-red-500 font-bold">!</span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
           <div className="w-[85%] flex flex-col">

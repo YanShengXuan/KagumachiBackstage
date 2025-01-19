@@ -2,7 +2,7 @@ import React from 'react';
 
 const Report = ({ year, quarter, month, data }) => {
 
-    // 動態標題顯示邏輯
+    // 動態標題顯示
     const generateTitle = () => {
         if (year && month) {
             return `${year} 年 ${month} 月的報表`;

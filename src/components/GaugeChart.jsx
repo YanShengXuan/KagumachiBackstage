@@ -27,7 +27,7 @@ const GaugeChart = ({ value, label, color }) => {
         ],
     });
 
-    // 當 `value` 或 `color` 發生變化時更新數據
+    // 當 value 或 color 發生變化時更新數據
     useEffect(() => {
         setChartData({
             labels: ["Filled", "Remaining"],

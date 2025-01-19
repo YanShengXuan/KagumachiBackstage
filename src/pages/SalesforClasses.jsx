@@ -1,50 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Button, Space, Select } from "antd";
 import { Link } from "react-router-dom";
 
 function SalesforClasses() {
+  const [classSource, setClassSource] = useState([]);
+  const [options, setOptions] = useState([]);
+
   const [editingKey, setEditingKey] = useState(null);
   const [editingRecord, setEditingRecord] = useState({});
 
-  // 表單設計:類別對應之活動
-  const classSource = [
-    {
-      key: "1",
-      class: "櫃子",
-      salenumber: "1",
-      salename: "全館櫃子類別商品九折",
-    },
-    {
-      key: "2",
-      class: "桌子",
-      salenumber: "0",
-      salename: "無活動",
-    },
-    {
-      key: "3",
-      class: "椅子",
-      salenumber: "0",
-      salename: "無活動",
-    },
-    {
-      key: "4",
-      class: "沙發",
-      salenumber: "0",
-      salename: "無活動",
-    },
-    {
-      key: "5",
-      class: "燈具",
-      salenumber: "0",
-      salename: "無活動",
-    },
-    {
-      key: "6",
-      class: "寢具",
-      salenumber: "0",
-      salename: "無活動",
-    },
-  ];
+  useEffect(() => {
+    fetch("http://localhost:8080/sales/getmaincategories")
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((item, index) => {
+          return {
+            key: index + 1,
+            class: item.categoryname,
+            salenumber: item.sales.salesid,
+            salename: item.sales.name,
+            saleoption: `${item.sales.salesid} - ${item.sales.name}`,
+          };
+        });
+        setClassSource(formattedData);
+      })
+      .catch((error) =>
+        console.error("Error fetching main categories:", error)
+      );
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/sales/getallsales")
+      .then((response) => response.json())
+      .then((saleData) => {
+        const saleoptions = saleData.map((item) => ({
+          label: `${item.salesid} - ${item.name}`,
+          value: item.salesid,
+        }));
+
+        setOptions(saleoptions);
+      })
+      .catch((error) => console.error("Error fetching sales:", error));
+  }, []);
 
   const classColumns = [
     {
@@ -55,29 +52,20 @@ function SalesforClasses() {
     },
     {
       title: "活動編號",
-      dataIndex: "salenumber",
-      key: "salenumber",
-      width: "10%",
-      render: (text, record) =>
-        editingKey === record.key ? (
+      dataIndex: "saleoption",
+      key: "saleoption",
+      width: "30%",
+      render: (text, record) => {
+        return editingKey === record.key ? (
           <Select
-            defaultValue={editingRecord.salenumber}
-            options={[
-              { label: "0", value: "0" },
-              { label: "1", value: "1" },
-              { label: "2", value: "2" },
-            ]}
-            onChange={(e) => handleSelectChange(e, "salenumber")}
+            defaultValue={record.saleoption}
+            options={options}
+            onChange={(e) => handleSelectChange(e, "saleoption")}
           />
         ) : (
           text
-        ),
-    },
-    {
-      title: "活動名稱",
-      dataIndex: "salename",
-      key: "salename",
-      width: "45%",
+        );
+      },
     },
     {
       title: "編輯",
@@ -109,14 +97,53 @@ function SalesforClasses() {
   };
 
   const saveChanges = () => {
-    // console.log("Saved record:", editingRecord);
-    setEditingKey(null);
+    const updatedClassSource = classSource.map((item) => {
+      if (item.key === editingKey) {
+        return {
+          ...item,
+          saleoption: `${editingRecord.salenumber} - ${editingRecord.salename}`,
+          salename: editingRecord.salename,
+          salenumber: editingRecord.salenumber,
+        };
+      }
+      return item;
+    });
+
+    fetch("http://localhost:8080/sales/updatecategory", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        categoryid: editingKey,
+        salesid: editingRecord.salenumber,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update category");
+        }
+        return response.json();
+      })
+      .then((result) => {
+        console.log("Update successful:", result);
+
+        setClassSource(updatedClassSource);
+        setEditingKey(null);
+        setEditingRecord({});
+      })
+      .catch((error) => {
+        console.error("Error updating category:", error);
+      });
   };
 
-  const handleSelectChange = (e, field) => {
+  const handleSelectChange = (value, field) => {
+    const selectedSale = options.find((option) => option.value === value);
     setEditingRecord({
       ...editingRecord,
-      [field]: e.target.value,
+      [field]: value,
+      salename: selectedSale ? selectedSale.label.split(" - ")[1] : "",
+      salenumber: selectedSale.label.split(" - ")[0],
     });
   };
 

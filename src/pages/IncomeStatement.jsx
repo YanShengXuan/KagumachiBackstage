@@ -1,30 +1,61 @@
 import React, { useState } from 'react';
-import YearQuarterSelector from '../components/YearQuarterSelector.jsx';
+import DateSelector from '../components/DateSelector.jsx';
 import Report from '../components/Report.jsx';
 import GaugeChart from '../components/GaugeChart.jsx';
 
+// 模擬動態獲取數據
+const fetchData = () => {
+    // 生成範圍內的隨機數
+    const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    // 營業收入、成本和毛利的隨機數生成邏輯
+    const revenue = getRandomNumber(50_000, 150_000); // 隨機營業收入（5萬 ~ 15萬）
+    const cost = getRandomNumber(30_000, revenue);    // 隨機營業成本（3萬 ~ 收入）
+    const profit = revenue - cost;                    // 毛利（收入 - 成本）
+
+    return { revenue, cost, profit };
+};
 
 const IncomeStatement = () => {
-    const [year, setYear] = useState(new Date().getFullYear());
-    const [quarter, setQuarter] = useState(1);
+    const [year, setYear] = useState(null); // null表示未選擇
+    const [quarter, setQuarter] = useState(null);
+    const [month, setMonth] = useState(null);
+    const [data, setData] = useState(null); // 初始為 null
 
-    const handleSelectionChange = (selectedYear, selectedQuarter) => {
-        setYear(selectedYear);
-        setQuarter(selectedQuarter);
+    const handleDateChange = (newYear, newQuarter, newMonth) => {
+        setYear(newYear);
+        setQuarter(newQuarter);
+        setMonth(newMonth);
+
+        // 當年份被選擇時，獲取數據
+        if (newYear) {
+            const updatedData = fetchData();
+            setData(updatedData);
+        } else {
+            setData(null); // 如果年份為 null，清空數據
+        }
     };
 
+    // 計算百分比
+    const costPercentage = data ? ((data.cost / data.revenue) * 100).toFixed(1) : 0;
+    const profitPercentage = data ? ((data.profit / data.revenue) * 100).toFixed(1) : 0;
+
     return (
-        <div className=" bg-color3 min-h-screen">
-            <div className="flex p-10 rounded-xl">
-                <div className="p-6 bg-color2 rounded-xl w-[95vw] h-[95vh]">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-4">數據/報表</h1>
-                        <YearQuarterSelector onSelectionChange={handleSelectionChange} />
-                    <div className="mt-6">
-                        <Report year={year} quarter={quarter} />
-                    </div>
-                    <div className="mt-6">
-                        <GaugeChart />
-                    </div>
+        <div className="w-full bg-[#A6A6A6] h-full pt-10">
+            <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">數據/報表</h1>
+                <DateSelector onSelectionChange={handleDateChange} />
+                <div className="mt-6">
+                    <Report year={year} quarter={quarter} month={month} data={data} />
+                </div>
+                <div className="mt-6 flex justify-between w-[95%] mx-auto">
+                    {data && (
+                        <>
+                            <GaugeChart value={100} label="營業收入" color="#4CAF50" />
+                            <GaugeChart value={costPercentage} label="營業成本" color="#FFC107" />
+                            <GaugeChart value={profitPercentage} label="營業毛利" color="#22d30e" />
+                        </>
+                    )}
                 </div>
             </div>
         </div>

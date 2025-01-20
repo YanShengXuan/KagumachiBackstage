@@ -11,6 +11,7 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [newMessageUsers, setNewMessageUsers] = useState([]);
   const stompClientRef = useRef(null);
   const chatWindowRef = useRef(null);
 
@@ -54,6 +55,9 @@ const Chat = () => {
                   { id: message.senderid, name: `User ${message.senderid}` },
                 ]);
               }
+              if (!message.isbackread) {
+                setNewMessageUsers((prev) => [...new Set([...prev, message.senderid])]);
+              }
             }
           }
         );
@@ -64,9 +68,21 @@ const Chat = () => {
           setMessages(historyMessages);
         });
 
-        // 請求用戶列表
+        client.subscribe("/topic/unreadBackMessages", (messageOutput) => {
+          const unreadMessages = JSON.parse(messageOutput.body);
+          console.log("Received unread back messages from server:", unreadMessages);
+          const unreadUserIds = unreadMessages.map((message) => message.senderid.toString());
+          setNewMessageUsers(unreadUserIds);
+          console.log("Updated newMessageUsers:", unreadUserIds);
+        });
+
         client.publish({
           destination: "/app/users",
+        });
+
+        client.publish({
+          destination: "/app/unreadBackMessages",
+          body: JSON.stringify(managerMemberId),
         });
       },
       onStompError: (frame) => {
@@ -95,6 +111,10 @@ const Chat = () => {
   }, [messages]);
 
   const sendMessage = () => {
+    if (input.trim() === "") {
+      // console.error("訊息不可為空");
+      return;
+    }
     if (stompClientRef.current && stompClientRef.current.connected) {
       const message = {
         senderid: managerMemberId,
@@ -118,6 +138,7 @@ const Chat = () => {
   const handleUserClick = (user) => {
     setSelectedUser(user);
     setMessages([]);
+    setNewMessageUsers((prev) => prev.filter((id) => id !== user.id));
     stompClientRef.current.publish({
       destination: "/app/historyBack",
       body: JSON.stringify({
@@ -125,52 +146,67 @@ const Chat = () => {
         receiverid: user.id.toString(),
       }),
     });
+    stompClientRef.current.publish({
+      destination: "/app/markAsReadBack",
+      body: JSON.stringify(user.id),
+    });
   };
 
   return (
-      <div className="p-8 flex mt-[5rem]">
-        <div className="w-[20%] pr-2">
-          <h2 className="text-lg font-bold mb-4">會員訊息</h2>
-          <ul>
-            {users.map((user) => (
-              <li
-                key={user.id}
-                className={`p-2 cursor-pointer ${
-                  selectedUser && selectedUser.id === user.id
-                    ? "text-blue-500 border rounded-md"
-                    : ""
-                }`}
-                onClick={() => handleUserClick(user)}
+    <div className="w-full bg-[#A6A6A6] h-full pt-10">
+      <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
+        <div className="p-8 flex">
+          <div className="w-[15%] pr-2">
+            <h2 className="text-lg font-bold mb-4 pl-7">會員訊息</h2>
+            <ul className="pr-8">
+              {users.map((user) => {
+                console.log("Rendering user:", user);
+                console.log("newMessageUsers:", newMessageUsers);
+                return (
+                  <li
+                    key={user.id}
+                    className={`p-3 mb-2 cursor-pointer text-[#000] ${
+                      selectedUser && selectedUser.id === user.id
+                        ? "bg-[#535759] rounded-xl text-[#FCF6F0]"
+                        : "bg-[rgb(216,216,216)]"
+                    } hover:bg-[#535759] hover:rounded-xl hover:text-[#fff] relative`}
+                    onClick={() => handleUserClick(user)}
+                  >
+                    {user.name}
+                    {newMessageUsers.includes(user.id) && (
+                      <span className="absolute top-[0.5rem] right-[1rem] text-xl text-red-500 font-bold">!</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div className="w-[85%] flex flex-col">
+            <ChatWindow
+              ref={chatWindowRef}
+              messages={messages}
+              selectedUser={selectedUser}
+              managerMemberId={managerMemberId}
+            />
+            <Input.TextArea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              rows={4}
+              placeholder="請輸入訊息"
+              className="mb-2"
+            />
+            <div className="flex justify-center">
+              <button
+                className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
+                onClick={sendMessage}
               >
-                {user.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="w-[80%] flex flex-col justify-center">
-          <ChatWindow
-            ref={chatWindowRef}
-            messages={messages}
-            selectedUser={selectedUser}
-            managerMemberId={managerMemberId}
-          />
-          <Input.TextArea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            rows={4}
-            placeholder="請輸入訊息"
-            className="mb-2"
-          />
-          <div className="flex justify-center">
-            <button
-              className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
-              onClick={sendMessage}
-            >
-              確認送出
-            </button>
+                確認送出
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

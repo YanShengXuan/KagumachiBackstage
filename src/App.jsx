@@ -2,13 +2,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 import HomePage from "./pages/HomePage";
 import Ship from "./pages/Ship";
+import ShipRateTable from "./components/ShipRateTable";
+import ShipOrderTable from "./components/ShipOrderTable";
 import Setting from "./pages/Setting";
 import TestOne from "./pages/TestOne.jsx";
 import FinancialManagement from "./pages/FinancialManagement.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
 import IncomeStatement from "./pages/IncomeStatement";
 import MemberPage from "./pages/MemberPage.jsx";
-import ProductsPage from "./pages/ProductsPage.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
 import Categories from "./pages/Categories.jsx";
 import Chat from "./pages/Chat";
 import "./App.css";
@@ -25,12 +27,15 @@ function App() {
           <Route path="homepage" element={<HomePage />} />
           <Route path="orderManagement" element={<OrderManagement />} />
           <Route path="financialManagement" element={<FinancialManagement />} />
-          <Route path="ship" element={<Ship />} />
+          <Route path="ship" element={<Ship />} >
+            <Route path="shipratetable" element={<ShipRateTable />} />
+            <Route path="shipordertable" element={<ShipOrderTable />} />
+          </Route>
           <Route path="setting" element={<Setting />} />
           <Route path="incomeStatement" element={<IncomeStatement />} />
           <Route path="testone" element={<TestOne />} />
           <Route path="memberpage" element={<MemberPage />} />
-          <Route path="productspage" element={<ProductsPage />} />
+          <Route path="productpage" element={<ProductPage />} />
           <Route path="categories" element={<Categories />} />
           <Route path="chat" element={<Chat />} />
           <Route path="suppliermanagement" element={<SupplierManagement />} />

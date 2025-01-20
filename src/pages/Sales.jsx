@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Button, Space, Input } from "antd";
 import { Link } from "react-router-dom";
+import Modal from "../components/Modal";
 
 function Sales() {
   const buttonstyle =
@@ -8,68 +9,75 @@ function Sales() {
 
   const [editingKey, setEditingKey] = useState(null);
   const [editingRecord, setEditingRecord] = useState({});
+
+  const [saleSource, setSaleSource] = useState([]);
+  const [total, setTotal] = useState(0); // 儲存資料總數
+
+  // modal相關
+  const initialFormData = {
+    saleName: "",
+    saleDescription: "",
+    discount: "",
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const switchModal = () => setIsModalOpen(!isModalOpen);
+  const [formData, setFormData] = useState(initialFormData);
+  const switchModal = () => {
+    setIsModalOpen(!isModalOpen);
+    setFormData(initialFormData);
+  };
+  const handleModalInputChange = (e, field) => {
+    setFormData({
+      ...formData,
+      [field]: e.target.value,
+    });
+  };
+
+  // 顯示活動
+  useEffect(() => {
+    fetch("http://localhost:8080/sales/getallsales")
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((item, index) => ({
+          key: index + 1,
+          salenumber: item.salesid,
+          saleid: item.salesid,
+          salename: item.name,
+          saledesc: item.salesdesc,
+          discount: item.discount,
+        }));
+        setSaleSource(formattedData);
+        setTotal(data.length);
+      })
+      .catch((error) => console.error("Error Get Sales:", error));
+  }, []);
+
+  // 新增活動至資料庫
+  const handleSaleModalSubmit = () => {
+    console.log(formData);
+    fetch("http://localhost:8080/sales/addsale", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Updating Supplier Error:", error);
+      });
+    // 關閉 Modal
+    setIsModalOpen(false);
+  };
 
   // 分頁設定
   const paginationProps = {
     pageSize: 6,
     showTotal: (total) => `總共 ${total} 項`,
-    total: 7,
+    total: total,
   };
-
-  // 表單設計:新增/編輯優惠活動
-  const saleSource = [
-    {
-      key: "1",
-      salenumber: "0",
-      salename: "無活動",
-      saledesc: "無活動說明",
-      discount: "1",
-    },
-    {
-      key: "2",
-      salenumber: "1",
-      salename: "全館櫃子類別商品九折",
-      saledesc: "全館櫃子類別商品九折的活動目的",
-      discount: "0.9",
-    },
-    {
-      key: "3",
-      salenumber: "2",
-      salename: "全館椅子類別商品八折",
-      saledesc: "全館椅子類別商品八折的活動目的",
-      discount: "0.8",
-    },
-    {
-      key: "4",
-      salenumber: "3",
-      salename: "測試活動三",
-      saledesc: "測試活動三敘述",
-      discount: "0.5",
-    },
-    {
-      key: "5",
-      salenumber: "4",
-      salename: "測試活動四",
-      saledesc: "測試活動四敘述",
-      discount: "0.5",
-    },
-    {
-      key: "6",
-      salenumber: "5",
-      salename: "測試活動五",
-      saledesc: "測試活動五敘述",
-      discount: "0.5",
-    },
-    {
-      key: "7",
-      salenumber: "6",
-      salename: "測試活動六",
-      saledesc: "測試活動六敘述",
-      discount: "0.5",
-    },
-  ];
 
   const saleColumns = [
     {
@@ -130,7 +138,7 @@ function Sales() {
       width: "30%",
       render: (_, record) => {
         // 判斷當 key === 1 時，不顯示按鈕
-        if (record.key === "1") {
+        if (record.key === 1) {
           return null; // 不渲染任何內容
         }
 
@@ -144,7 +152,7 @@ function Sales() {
         ) : (
           <Space>
             <Button onClick={() => startEditing(record)}>編輯</Button>
-            <Button onClick={() => startDeleting(record)}>刪除</Button>
+            <Button onClick={() => deleteSale(record)}>刪除</Button>
           </Space>
         );
       },
@@ -156,18 +164,50 @@ function Sales() {
     setEditingRecord({ ...record });
   };
 
-  const startDeleting = (record) => {
-    console.log(record);
-  };
-
   const cancelEditing = () => {
     setEditingKey(null);
     setEditingRecord({});
   };
 
   const saveChanges = () => {
-    // console.log("Saved record:", editingRecord);
+    fetch("http://localhost:8080/sales/updatesale", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editingRecord),
+    })
+      .then((response) => response.json)
+      .then(() => {})
+      .catch((error) => {
+        console.error("Updating Sale Error:", error);
+      });
+    setSaleSource((prevData) =>
+      prevData.map((item) =>
+        item.key === editingKey ? { ...item, ...editingRecord } : item
+      )
+    );
     setEditingKey(null);
+  };
+
+  const deleteSale = (record) => {
+    fetch("http://localhost:8080/sales/deletesale", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(record),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to delete sale");
+        return response.json();
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Deleting Sale Error:", error);
+      });
   };
 
   const handleInputChange = (e, field) => {
@@ -208,6 +248,41 @@ function Sales() {
           }}
         />
       </div>
+
+      {/*modal開關*/}
+      {isModalOpen && (
+        <Modal
+          onClose={switchModal}
+          onSubmit={handleSaleModalSubmit}
+          title="新增活動"
+        >
+          <div>
+            活動名稱：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.saleName}
+              onChange={(e) => handleModalInputChange(e, "saleName")}
+            />
+            <br />
+            活動敘述：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.saleDescription}
+              onChange={(e) => handleModalInputChange(e, "saleDescription")}
+            />
+            <br />
+            折扣值：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.discount}
+              onChange={(e) => handleModalInputChange(e, "discount")}
+            />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

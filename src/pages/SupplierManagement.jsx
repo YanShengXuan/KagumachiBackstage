@@ -1,55 +1,125 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, Button, Space, Input } from "antd";
 import Modal from "../components/Modal";
 
 function SupplierManagement() {
   const buttonstyle =
     "mt-1 bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[7%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
-  const categories = {
-    櫃子: ["衣櫃", "鞋櫃", "書櫃", "櫥櫃", "電視櫃", "浴櫃"],
-    桌子: ["餐桌", "茶几", "書桌", "升降桌"],
-    椅子: ["餐椅", "椅凳", "辦公椅", "電競椅", "吧檯椅"],
-    沙發: ["單人", "雙人", "L型"],
-    燈具: ["坎燈", "吊燈", "檯燈", "壁燈"],
-    寢具: ["床架", "床墊", "床包/棉被/枕頭"],
-  };
 
   const [supplier, setSupplier] = useState("");
-  const [mainCategory, setMainCategory] = useState("");
+  const [selectedSupplier, setSelectedSupplier] = useState([]);
+
+  // const [mainCategory, setMainCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [selectedSubcategory, setSelectedSubcategory] = useState([]);
+
+  // modal相關
+  const initialFormData = {
+    supplierName: "",
+    subcategoryName: "",
+    supplierAddress: "",
+    supplierPhone: "",
+    contactor: "",
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState(initialFormData);
+  const switchModal = () => {
+    setIsModalOpen(!isModalOpen);
+    setFormData(initialFormData);
+    setSubcategory("");
+  };
+  const handleModalInputChange = (e, field) => {
+    setFormData({
+      ...formData,
+      [field]: e.target.value,
+    });
+  };
+
   const [editingKey, setEditingKey] = useState(null);
   const [editingRecord, setEditingRecord] = useState({});
 
-  const handleSupplierChange = (e) => setSupplier(e.target.value);
-  const handleMainCategoryChange = (e) => setMainCategory(e.target.value);
-  const handleSearch = () => {
-    // 搜尋廠商API
-    console.log({ supplier, mainCategory });
-  };
-  const switchModal = () => setIsModalOpen(!isModalOpen);
+  const [dataSource, setDataSource] = useState([]);
 
-  const dataSource = [
-    {
-      key: "1",
-      number: "1",
-      name: "廠商A",
-      category: "椅子",
-      address: "10 Downing Street",
-      phonenumber: "0412345678",
-      contactor: "Mr.資",
-      status: "上架中",
-    },
-    {
-      key: "2",
-      number: "2",
-      name: "廠商A",
-      category: "椅子",
-      address: "10 Downing Street",
-      phonenumber: "0412345678",
-      contactor: "Mr.資",
-      status: "上架中",
-    },
-  ];
+  const handleSupplierChange = (e) => setSupplier(e.target.value);
+  const handleCategoryChange = (e) => setSubcategory(e.target.value);
+
+  const handleSearch = () => {
+    const payload = {
+      supplierName: supplier,
+      subcategoryName: subcategory,
+    };
+
+    fetch("http://localhost:8080/suppliers/getbysearch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((item, index) => ({
+          key: index + 1, // 唯一鍵
+          number: index + 1,
+          name: item.name,
+          category: item.subCategory.categoryname,
+          address: item.address,
+          phonenumber: item.phone,
+          contactor: item.contact,
+          status: item.status,
+          supplierid: item.supplierid,
+        }));
+
+        setDataSource(formattedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching suppliers:", error);
+      });
+
+    console.log({ supplier, subcategory });
+  };
+
+  // 獲取下拉式廠商名單
+  useEffect(() => {
+    fetch("http://localhost:8080/suppliers/getallnames")
+      .then((response) => response.json())
+      .then((data) => {
+        setSelectedSupplier(data);
+      })
+      .catch((error) => console.error("Error fetching supplier names:", error));
+  }, []);
+
+  // 獲取下拉式分類名單
+  useEffect(() => {
+    fetch("http://localhost:8080/subcategories/getallnames")
+      .then((response) => response.json())
+      .then((data) => {
+        setSelectedSubcategory(data);
+      })
+      .catch((error) => console.error("Error fetching supplier names:", error));
+  }, []);
+
+  // 新增廠商至資料庫
+  const handleModalSubmit = () => {
+    fetch("http://localhost:8080/suppliers/addsupplier", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json)
+      .then((result) => {
+        // setSupplier((prevSuppliers) => [...prevSuppliers, result]);
+        console.log("新增:" + result.message);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Updating Supplier Error:", error);
+      });
+    // 關閉 Modal
+    setIsModalOpen(false);
+  };
 
   const startEditing = (record) => {
     setEditingKey(record.key);
@@ -62,8 +132,47 @@ function SupplierManagement() {
   };
 
   const saveChanges = () => {
-    // console.log("Saved record:", editingRecord);
+    fetch("http://localhost:8080/suppliers/updatesupplier", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editingRecord),
+    })
+      .then((response) => response.json)
+      .then((result) => {
+        console.log("Update successful:", result);
+      })
+      .catch((error) => {
+        console.error("Updating Supplier Error:", error);
+      });
+    setDataSource((prevData) =>
+      prevData.map((item) =>
+        item.key === editingKey ? { ...item, ...editingRecord } : item
+      )
+    );
     setEditingKey(null);
+  };
+
+  const deleteSupplier = (record) => {
+    fetch("http://localhost:8080/suppliers/deletesupplier", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(record),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to delete supplier");
+        return response.json();
+      })
+      .then((result) => {
+        console.log("刪除:" + result.message);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Deleting Supplier Error:", error);
+      });
   };
 
   const handleInputChange = (e, field) => {
@@ -100,15 +209,15 @@ function SupplierManagement() {
       dataIndex: "category",
       key: "category",
       width: "8%",
-      render: (text, record) =>
-        editingKey === record.key ? (
-          <Input
-            value={editingRecord.category}
-            onChange={(e) => handleInputChange(e, "category")}
-          />
-        ) : (
-          text
-        ),
+      // render: (text, record) =>
+      //   editingKey === record.key ? (
+      //     <Input
+      //       value={editingRecord.category}
+      //       onChange={(e) => handleInputChange(e, "category")}
+      //     />
+      //   ) : (
+      //     text
+      //   ),
     },
     {
       title: "廠商地址",
@@ -175,7 +284,10 @@ function SupplierManagement() {
             <Button onClick={cancelEditing}>取消</Button>
           </Space>
         ) : (
-          <Button onClick={() => startEditing(record)}>編輯</Button>
+          <Space>
+            <Button onClick={() => startEditing(record)}>編輯</Button>
+            <Button onClick={() => deleteSupplier(record)}>刪除</Button>
+          </Space>
         ),
     },
   ];
@@ -193,9 +305,11 @@ function SupplierManagement() {
               className="block mt-1 w-full p-2 rounded border border-gray-300 text-black"
             >
               <option value="">請選擇廠商</option>
-              <option value="廠商A">廠商A</option>
-              <option value="廠商B">廠商B</option>
-              <option value="廠商C">廠商C</option>
+              {selectedSupplier.map((supplier, index) => (
+                <option value={supplier} key={index}>
+                  {supplier}
+                </option>
+              ))}
             </select>
           </label>
         </div>
@@ -204,14 +318,14 @@ function SupplierManagement() {
           <label className="block font-medium mb-2">
             家具分類:
             <select
-              value={mainCategory}
-              onChange={handleMainCategoryChange}
+              value={subcategory}
+              onChange={handleCategoryChange}
               className="block mt-1 w-full p-2 rounded border border-gray-300 text-black"
             >
               <option value="">請選擇分類</option>
-              {Object.keys(categories).map((category) => (
-                <option key={category} value={category}>
-                  {category}
+              {selectedSubcategory.map((subcategory, index) => (
+                <option value={subcategory} key={index}>
+                  {subcategory}
                 </option>
               ))}
             </select>
@@ -235,7 +349,67 @@ function SupplierManagement() {
         <Table dataSource={dataSource} columns={columns} />
       </div>
       {/*modal開關*/}
-      {isModalOpen ? <Modal onClose={switchModal} /> : null}
+      {isModalOpen && (
+        <Modal
+          onClose={switchModal}
+          onSubmit={handleModalSubmit}
+          title="新增廠商"
+        >
+          <div>
+            廠商名稱：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.supplierName}
+              onChange={(e) => handleModalInputChange(e, "supplierName")}
+            />
+            <br />
+            <label className="block font-medium mb-2">
+              家具分類:
+              <select
+                value={subcategory}
+                onChange={(e) => {
+                  handleModalInputChange(e, "subcategoryName");
+                  setSubcategory(e.target.value);
+                }}
+                className="block mt-1 w-full p-2 rounded border border-gray-300 text-black"
+              >
+                <option value="">請選擇分類</option>
+                {selectedSubcategory.map((subcategory, index) => (
+                  <option value={subcategory} key={index}>
+                    {subcategory}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <br />
+            廠商地址：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.supplierAddress}
+              onChange={(e) => handleModalInputChange(e, "supplierAddress")}
+            />
+            <br />
+            廠商聯絡電話：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.supplierPhone}
+              onChange={(e) => handleModalInputChange(e, "supplierPhone")}
+            />
+            <br />
+            廠商聯絡人：
+            <input
+              type="text"
+              className="border rounded mt-1"
+              value={formData.contactor}
+              onChange={(e) => handleModalInputChange(e, "contactor")}
+            />
+            <br />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

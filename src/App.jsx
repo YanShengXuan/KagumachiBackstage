@@ -10,8 +10,8 @@ import FinancialManagement from "./pages/FinancialManagement.jsx";
 import OrderManagement from "./pages/OrderManagement.jsx";
 import IncomeStatement from "./pages/IncomeStatement";
 import MemberPage from "./pages/MemberPage.jsx";
-// import ProductsPage from "./pages/ProductsPage.jsx";
-// import Categories from "./pages/Categories.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
+import Categories from "./pages/Categories.jsx";
 import Chat from "./pages/Chat";
 import "./App.css";
 import SupplierManagement from "./pages/SupplierManagement.jsx";
@@ -35,8 +35,8 @@ function App() {
           <Route path="incomeStatement" element={<IncomeStatement />} />
           <Route path="testone" element={<TestOne />} />
           <Route path="memberpage" element={<MemberPage />} />
-          {/*<Route path="productspage" element={<ProductsPage />} />*/}
-          {/*<Route path="categories" element={<Categories />} />*/}
+          <Route path="productpage" element={<ProductPage />} />
+          <Route path="categories" element={<Categories />} />
           <Route path="chat" element={<Chat />} />
           <Route path="suppliermanagement" element={<SupplierManagement />} />
           <Route path="sales" element={<Sales />} />

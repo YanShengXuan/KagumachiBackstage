@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-function Modal({ onClose }) {
+function Modal({ onClose, title, children, onSubmit }) {
   const buttonstyle =
     "mt-1 bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[20%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
 
@@ -21,23 +21,12 @@ function Modal({ onClose }) {
             d="M6 18 18 6M6 6l12 12"
           />
         </svg>
-        <h1 className="font-bold text-xl">新增廠商</h1>
-        <div className="text-lg">
-          廠商名稱：<input type="text" className="border rounded mt-1"></input>
-          <br />
-          家具分類：<input type="text" className="border rounded mt-1"></input>
-          <br />
-          廠商地址：<input type="text" className="border rounded mt-1"></input>
-          <br />
-          廠商聯絡電話：
-          <input type="text" className="border rounded mt-1"></input>
-          <br />
-          廠商聯絡人：
-          <input type="text" className="border rounded mt-1"></input>
-          <br />
-        </div>
+        <h1 className="font-bold text-xl">{title}</h1>
+        <div className="text-lg">{children}</div>
         <div className="flex justify-center items-center mt-4">
-          <button className={buttonstyle}>送出</button>
+          <button className={buttonstyle} onClick={onSubmit}>
+            送出
+          </button>
         </div>
       </div>
     </div>

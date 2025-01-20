@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -7,7 +7,7 @@ Chart.register(ArcElement, Tooltip, Legend);
 
 const GaugeChart = ({ value, label, color }) => {
     // 圖表數據
-    const data = {
+    const [chartData, setChartData] = useState({
         labels: ["Filled", "Remaining"],
         datasets: [
             {
@@ -17,10 +17,32 @@ const GaugeChart = ({ value, label, color }) => {
                 cutout: "80%", // 圓心的空洞大小
                 rotation: -90, // 起始角度
                 circumference: 180, // 半圓形範圍
-                // borderRadius: 10, // 添加圓弧效果
+                borderRightRadius:10,
+
+                // borderTopLeftRadius:0, // 添加圓弧效果
+                // borderTopRightRadius:10,
+                // borderBottomRightRadius:10,
+                // borderBottomLeftRadius:0,
             },
         ],
-    };
+    });
+
+    // 當 value 或 color 發生變化時更新數據
+    useEffect(() => {
+        setChartData({
+            labels: ["Filled", "Remaining"],
+            datasets: [
+                {
+                    data: [value, 100 - value],
+                    backgroundColor: [color, "#F3F4F6"],
+                    borderWidth: 0,
+                    cutout: "80%",
+                    rotation: -90,
+                    circumference: 180,
+                },
+            ],
+        });
+    }, [value, color]);
 
     // 圖表選項
     const options = {
@@ -36,7 +58,7 @@ const GaugeChart = ({ value, label, color }) => {
         <div className="w-1/3 flex flex-col items-center">
             {/* 儀表圖 */}
             <div className="relative w-full h-40">
-                <Doughnut data={data} options={options} />
+                <Doughnut data={chartData} options={options} />
                 {/* 圖表中心文字 */}
                 <div className="absolute inset-0 flex items-center justify-center text-center">
                     <div className="absolute bottom-0 left-0 w-full flex flex-col items-center text-center">
@@ -49,17 +71,4 @@ const GaugeChart = ({ value, label, color }) => {
     );
 };
 
-const Dashboard = () => {
-    return (
-        <div className="flex justify-between w-full mx-auto">
-            {/* 營業收入 */}
-            <GaugeChart value={100} label="營業收入" color="#4CAF50" />
-            {/* 營業成本 */}
-            <GaugeChart value={60} label="營業成本" color="#FFC107" />
-            {/* 營業毛利 */}
-            <GaugeChart value={40} label="營業毛利" color="#22d30e" />
-        </div>
-    );
-};
-
-export default Dashboard;
+export default GaugeChart;

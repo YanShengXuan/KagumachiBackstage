@@ -1,0 +1,25 @@
+.react-datepicker__current-month {
+    display: none;
+}
+
+.react-datepicker__header__dropdown{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.react-datepicker__month-dropdown-container{
+    order:2;
+}
+
+.react-datepicker__year-dropdown-container{
+    order:1;
+}
+
+td .react-datepicker-ignore-onclickoutside{
+    padding: 1px;
+}
+
+td .react-datepicker-wrapper input{
+    padding: 1px;
+}

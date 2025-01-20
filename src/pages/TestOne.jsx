@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import ChartFour from '../components/ChartFour'
 import ChartOne from '../components/ChartOne'
 
+
 const TestOne = () => {
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -40,7 +41,7 @@ const TestOne = () => {
         {/* 會員新增數量 */}
         <div className="bg-color2 rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold mb-4 ">會員新增數量</h3>
-          <div className="h-32 bg-color2 flex items-center justify-center text-gray-500 ">
+          <div className="h-32 bg-gray-200 flex items-center justify-center text-gray-500 ">
             <ChartOne />
           </div>
         </div>
@@ -49,7 +50,6 @@ const TestOne = () => {
         <div className="bg-color2 rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold mb-4">熱銷商品排行</h3>
           <ol className="list-decimal ml-6 space-y-1 text-gray-700">
-
             {productnames.map((name, index) => (
               <li key={index}>{name}</li>
             ))}

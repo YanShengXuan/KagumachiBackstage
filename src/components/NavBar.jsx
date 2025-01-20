@@ -15,7 +15,7 @@ const Navbar = () => {
           <div className="bg-color2 p-4 rounded-xl w-[20vw] h-[100%] ">
             <div className=" bg-color2 p-2 flex-col flex-wrap text-center">
               <button
-                className={`rounded-3xl  text-black py-5 px-4 bg-color2 text-3xl ${
+                className={`rounded-3xl  text-black py-1 px-4 bg-color2 text-3xl ${
                   activeTab === "主頁" ? "bg-color2" : "bg-color2"
                 }`}
                 onClick={() => openPage("主頁")}
@@ -25,7 +25,7 @@ const Navbar = () => {
                 </h1>
               </button>
               <button
-                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1   text-2xl ${
+                className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1 text-2xl ${
                   activeTab === "會員管理" ? "bg-color1" : "bg-color2"
                 }`}
                 onClick={() => openPage("會員管理")}
@@ -38,8 +38,8 @@ const Navbar = () => {
                 }`}
                 onClick={() => openPage("商品管理")}
               >
-                {/*<Link to="productspage">商品管理</Link>*/}
-                商品管理
+                <Link to="productpage">商品管理</Link>
+
               </button>
               <button
                 className={`rounded-3xl w-full block text-black py-4 px-3 hover:text-white hover:bg-color1  text-2xl ${

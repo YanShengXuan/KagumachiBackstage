@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import OrderMonthBarChart from "../components/OrderMonthBarChart.jsx";
 import OrderCityBarChart from "../components/OrderCityBarChart.jsx";
@@ -10,19 +11,55 @@ const buttonStyle =
 const tableThStyle = "border-2 border-black text-center text-xl";
 
 function OrderManagement() {
+  const tempOrderId = useLocation();
   const [orderData, setOrderData] = useState([]);
+  const [orderId, setOrderId] = useState(0);
+  const [orderMemberData, setOrderMemberData] = useState([]);
+  const [tempOrderIdState, setTempOrderIdState] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  useEffect(() => {
+    if (tempOrderId.state != null) {
+      setTempOrderIdState(true);
+      setOrderId(tempOrderId.state?.orderId);
+    } else {
+      setTempOrderIdState(false);
+      setOrderId();
+    }
+  }, [tempOrderId]);
+
+  useEffect(() => {
+    if (tempOrderId.state != null) {
+      setOrderId(tempOrderId.state?.orderId);
+      fetch(orderMemberUrl, { method: "GET" })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error:" + response.status);
+          } else {
+            return response.json();
+          }
+        })
+        .then((data) => {
+          setOrderMemberData(data);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  }, [orderId]);
 
   const dateRange = {
     startDate: startDate,
     endDate: endDate,
   };
 
+  const orderMemberUrl = `http://localhost:8080/order/member/${orderId}`;
   const orderBetweenUrl = "http://localhost:8080/order/between";
   const orderTotalPriceASCUrl = "http://localhost:8080/order/totalpriceASC";
   const orderStatusASCUrl = "http://localhost:8080/order/totalpriceASC";
+
   const ordersBetween = () => {
+    setTempOrderIdState(false);
     fetch(orderBetweenUrl, {
       method: "POST",
       headers: {
@@ -44,7 +81,6 @@ function OrderManagement() {
         console.Error(error.message);
       });
   };
-
   const orderstotalpriceASC = () => {
     fetch(orderTotalPriceASCUrl, {
       method: "POST",
@@ -89,7 +125,36 @@ function OrderManagement() {
         console.Error(error.message);
       });
   };
-
+  const showOrderData =
+    tempOrderIdState != true
+      ? orderData.map((data) => (
+          <OrderItem
+            key={data.orderid}
+            id={data.orderid}
+            date={data.orderdate}
+            orderSerial={data.orderserial}
+            name={data.member.realname}
+            city={data.member.city}
+            payMethod={data.paymentmethod}
+            totalPrice={data.totalprice}
+            status={data.orderstatus}
+            logisticsSerial={data.logisticsnumber}
+          />
+        ))
+      : orderMemberData.map((data) => (
+          <OrderItem
+            key={data.orderid}
+            id={data.orderid}
+            date={data.orderdate}
+            orderSerial={data.orderserial}
+            name={data.member.realname}
+            city={data.member.city}
+            payMethod={data.paymentmethod}
+            totalPrice={data.totalprice}
+            status={data.orderstatus}
+            logisticsSerial={data.logisticsnumber}
+          />
+        ));
   return (
     <>
       <div className="w-full bg-[#A6A6A6] h-full pt-10">
@@ -152,32 +217,17 @@ function OrderManagement() {
                 <table className="border-2 border-collapse mr-1 w-[100%]">
                   <thead>
                     <tr>
-                      <th className={tableThStyle}>訂購日</th>
-                      <th className={tableThStyle}>訂單編號</th>
-                      <th className={tableThStyle}>訂購人</th>
-                      <th className={tableThStyle}>訂購城市</th>
-                      <th className={tableThStyle}>付款方式</th>
-                      <th className={tableThStyle}>應付金額</th>
-                      <th className={tableThStyle}>處理進度</th>
-                      <th className={tableThStyle}>物流單號</th>
+                      <th className={`${tableThStyle} w-[12%]`}>訂購日</th>
+                      <th className={`${tableThStyle} w-[13%]`}>訂單編號</th>
+                      <th className={`${tableThStyle} w-[8%]`}>訂購人</th>
+                      <th className={`${tableThStyle} w-[10%]`}>訂購城市</th>
+                      <th className={`${tableThStyle} w-[10%]`}>付款方式</th>
+                      <th className={`${tableThStyle} w-[20%]`}>應付金額</th>
+                      <th className={`${tableThStyle} w-[8%]`}>處理進度</th>
+                      <th className={`${tableThStyle} w-[19%]`}>物流單號</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {orderData.map((data) => (
-                      <OrderItem
-                        key={data.orderid}
-                        id={data.orderid}
-                        date={data.orderdate}
-                        orderSerial={data.orderserial}
-                        name={data.member.realname}
-                        city={data.member.city}
-                        payMethod={data.paymentmethod}
-                        totalPrice={data.totalprice}
-                        status={data.orderstatus}
-                        logisticsSerial={data.logisticsnumber}
-                      />
-                    ))}
-                  </tbody>
+                  <tbody>{showOrderData}</tbody>
                 </table>
               </div>
             </div>

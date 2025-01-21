@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import { Select, Input, InputNumber, Button } from "antd";
 
@@ -194,7 +195,6 @@ function FinancialManagement() {
         setModalItem(null);
         setModalDetails(null);
         setModalMoney(null);
-        console.log("OK");
       })
       .catch((error) => {
         console.error(error.message);
@@ -215,7 +215,6 @@ function FinancialManagement() {
         }
       })
       .then(() => {
-        console.log("OK");
         financeBetween();
       })
       .catch((error) => {
@@ -236,12 +235,12 @@ function FinancialManagement() {
                 />
                 <button
                   className={
-                    startDate != null | endDate != null
+                    (startDate != null) | (endDate != null)
                       ? `${buttonStyle}`
                       : `${buttonStyle} cursor-not-allowed`
                   }
                   onClick={financeBetween}
-                  disabled={startDate == null | endDate == null}
+                  disabled={(startDate == null) | (endDate == null)}
                 >
                   確認
                 </button>
@@ -249,22 +248,22 @@ function FinancialManagement() {
               <div className="flex">
                 <button
                   className={
-                    startDate != null | endDate != null
+                    (startDate != null) | (endDate != null)
                       ? `ml-8 ${buttonStyle}`
                       : `ml-8 ${buttonStyle} cursor-not-allowed`
                   }
-                  disabled={startDate == null | endDate == null}
+                  disabled={(startDate == null) | (endDate == null)}
                   onClick={financeRangeExpenditure}
                 >
                   支出篩選
                 </button>
                 <button
                   className={
-                    startDate != null | endDate != null
+                    (startDate != null) | (endDate != null)
                       ? `ml-8 ${buttonStyle}`
                       : `ml-8 ${buttonStyle} cursor-not-allowed`
                   }
-                  disabled={startDate == null | endDate == null}
+                  disabled={(startDate == null) | (endDate == null)}
                   onClick={financeRangeIncome}
                 >
                   收入篩選

@@ -109,7 +109,13 @@ const ChatWindow = forwardRef(({ messages, selectedUser, managerMemberId }, ref)
       ref={chatContainerRef}
       className="w-full mb-5 h-[30rem] overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]"
     >
-      {renderMessagesWithDate()}
+      {selectedUser ? (
+        renderMessagesWithDate()
+      ) : (
+        <div className="text-center text-gray-500 text-2xl  my-[13rem] ml-[2rem]">
+          請先選擇會員再回覆訊息。
+        </div>
+      )}
     </div>
   );
 });

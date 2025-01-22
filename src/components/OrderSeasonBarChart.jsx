@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -20,17 +20,81 @@ ChartJS.register(
 );
 
 function OrderSeasonBarChart() {
-  const [labelData, setLabelData] = useState(
-    [["臺北市"],["臺中市"],["基隆市"]]
-  );
+  const [isLoadingA, setIsLoadingA] = useState(true);
+  const [labelData, setLabelData] = useState([]);
+  const allSubCategoryUrl = "http://localhost:8080/order/allSubCategory";
+
+  useEffect(() => {
+    fetch(allSubCategoryUrl, { method: "GET" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error:" + response.status);
+        } else {
+          return response.json();
+        }
+      })
+      .then((datas) => {
+        setLabelData(datas.map((data) => data.categoryname));
+      })
+      .then(() => {
+        setIsLoadingA(false);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }, []);
+
+  const [isLoadingB, setIsLoadingB] = useState(true);
+  const [labelQuantity, setLabelQuantity] = useState([]);
+  const today = new Date();
+  const endYear = today.getFullYear();
+  const endMonth = today.getMonth() + 1;
+  const startYear =
+    endMonth - 2 < 1 ? today.getFullYear() - 1 : today.getFullYear();
+  const startMonth = endMonth - 2 < 1 ? endMonth + 10 : endMonth - 2;
+  const formatStartDate = `${startYear}-${String(startMonth).padStart(2, "0")}-01`;
+  const formatEndDate = `${endYear}-${String(endMonth).padStart(2, "0")}-31`;
+  const getOrderSeasonUrl = `http://localhost:8080/order/orderSeason/${formatStartDate}/${formatEndDate}`;
+  useEffect(() => {
+    fetch(getOrderSeasonUrl, { method: "GET" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error:" + response.status);
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        setLabelQuantity(data);
+      })
+      .then(()=>{
+        setIsLoadingB(false);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }, []);
+
+  if(isLoadingA | isLoadingB){
+    return <div></div>
+  }
+
+  console.log(labelQuantity)
+  console.log(labelData)
+
+  const quantity = labelData.map(categoryname =>{
+    const found = labelQuantity.find(item => item.categoryname == categoryname);
+    return found ? found.quantity : 0;
+  });
+  console.log(quantity);
+
+
   const data = {
     labels: [...labelData],
     datasets: [
       {
         label: "訂單數",
-        data: [
-          3, 4, 5, 6, 7, 2, 5, 3, 6, 9, 8, 10, 3, 2, 7, 3, 10, 5, 6, 2, 1, 10,
-        ],
+        data: quantity,
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 2,

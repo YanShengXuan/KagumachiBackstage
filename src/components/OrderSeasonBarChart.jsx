@@ -79,15 +79,10 @@ function OrderSeasonBarChart() {
     return <div></div>
   }
 
-  console.log(labelQuantity)
-  console.log(labelData)
-
   const quantity = labelData.map(categoryname =>{
     const found = labelQuantity.find(item => item.categoryname == categoryname);
     return found ? found.quantity : 0;
   });
-  console.log(quantity);
-
 
   const data = {
     labels: [...labelData],

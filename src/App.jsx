@@ -23,7 +23,7 @@ function App() {
     <BrowserRouter basename="/KagumachiBackstage">
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<TestOne />} />
           <Route path="homepage" element={<HomePage />} />
           <Route path="orderManagement" element={<OrderManagement />} />
           <Route path="financialManagement" element={<FinancialManagement />} />

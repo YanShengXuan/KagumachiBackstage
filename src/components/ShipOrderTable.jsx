@@ -47,7 +47,7 @@ const ShipOrderTable = () => {
       title: "訂單編號",
       dataIndex: "orderNumber",
       key: "orderNumber",
-      render: (text) => <Link to="../../orderManagement">{text}</Link>,
+      render: (text, record) => <Link to={`../../orderManagement/${record.orderid}`}>{record.orderNumber}</Link>,
     },
     {
       title: "訂購日期",

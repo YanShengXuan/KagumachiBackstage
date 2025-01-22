@@ -32,7 +32,7 @@ const Chat = () => {
         client.subscribe("/topic/users", (messageOutput) => {
           const usersList = JSON.parse(messageOutput.body);
           console.log("Received users from server:", usersList);
-          setUsers(usersList.map((id) => ({ id, name: `user ${id}` })));
+          setUsers(usersList.map((id) => ({ id, name: `${id}` })));
         });
 
         client.subscribe(
@@ -157,7 +157,7 @@ const Chat = () => {
       <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
         <div className="p-8 flex">
           <div className="w-[15%] pr-2">
-            <h2 className="text-lg font-bold mb-4 pl-7">會員訊息</h2>
+            <h2 className="text-lg font-bold mb-4 pl-7">會員ID</h2>
             <ul className="pr-8">
               {users.map((user) => {
                 console.log("Rendering user:", user);
@@ -194,11 +194,13 @@ const Chat = () => {
               rows={4}
               placeholder="請輸入訊息"
               className="mb-2"
+              disabled={!selectedUser}
             />
             <div className="flex justify-center">
               <button
-                className="px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer"
+                className={`px-20 py-3 border border-gray-300 rounded-md bg-[#5783db] text-gray-100 hover:bg-[#55c2da] hover:text-gray-100 hover:cursor-pointer ${selectedUser ? "" : "opacity-50 hover:cursor-not-allowed"}`}
                 onClick={sendMessage}
+                disabled={!selectedUser}
               >
                 確認送出
               </button>

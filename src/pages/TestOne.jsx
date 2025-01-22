@@ -2,6 +2,8 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import ChartFour from '../components/ChartFour'
 import ChartOne from '../components/ChartOne'
+import Stock from '../components/Stock';
+import WeiSales from '../components/WeiSales';
 
 
 const TestOne = () => {
@@ -70,40 +72,7 @@ const TestOne = () => {
         {/* 需補貨商品 */}
         <div className="bg-color2 rounded-lg shadow p-4 col-span-2 ">
           <h3 className="text-lg font-semibold mb-4">需補貨商品</h3>
-          <table className="table-auto w-full text-left border-collapse ">
-            <thead>
-              <tr className="bg-color2 border-black">
-                <th className="px-4 py-2">產品編號</th>
-                <th className="px-4 py-2">目前庫存</th>
-                <th className="px-4 py-2">低於庫存數量</th>
-                <th className="px-4 py-2">供應商</th>
-                <th className="px-4 py-2">供應商電話</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border px-4 py-2">101</td>
-                <td className="border px-4 py-2">5</td>
-                <td className="border px-4 py-2">10</td>
-                <td className="border px-4 py-2">布萊德大公司</td>
-                <td className="border px-4 py-2">123-4567</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">101</td>
-                <td className="border px-4 py-2">5</td>
-                <td className="border px-4 py-2">10</td>
-                <td className="border px-4 py-2">布萊德大公司</td>
-                <td className="border px-4 py-2">123-4567</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">101</td>
-                <td className="border px-4 py-2">5</td>
-                <td className="border px-4 py-2">10</td>
-                <td className="border px-4 py-2">布萊德大公司</td>
-                <td className="border px-4 py-2">123-4567</td>
-              </tr>
-            </tbody>
-          </table>
+            <Stock />
         </div>
 
         {/* 客戶投訴 */}
@@ -118,8 +87,7 @@ const TestOne = () => {
         <div className="bg-color2 rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold mb-4">目前優惠活動</h3>
           <ul className="list-disc ml-6 space-y-1 text-gray-700">
-            <li>全館九折</li>
-            <li>滿千送百</li>
+            <WeiSales />
           </ul>
         </div>
 

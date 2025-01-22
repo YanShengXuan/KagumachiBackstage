@@ -20,7 +20,7 @@ const ChartOne = () => {
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/myback/test');
+      const response = await fetch('http://localhost:8080/myback/member');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

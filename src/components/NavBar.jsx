@@ -5,7 +5,7 @@ const Navbar = () => {
   const isMemberPage = useMatch("/memberpage");
   const isProductPage = useMatch("/productpage");
   const isCategories = useMatch("/categories");
-  const isOrderManagement = useMatch("/orderManagement");
+  const isOrderManagement = useMatch("/orderManagement/*");
   const isFinancialManagement = useMatch("/financialManagement");
   const isSupplierManagement = useMatch("/suppliermanagement");
   const isSales = useMatch("/sales");

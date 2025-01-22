@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import OrderMonthBarChart from "../components/OrderMonthBarChart.jsx";
-import OrderCityBarChart from "../components/OrderCityBarChart.jsx";
+import OrderSeasonBarChart from "../components/OrderSeasonBarChart.jsx";
 import Dates from "../components/Dates.jsx";
 import OrderItem from "../components/OrderItem.jsx";
 
@@ -160,11 +160,11 @@ function OrderManagement() {
       <div className="w-full bg-[#A6A6A6] h-full pt-10">
         <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
           <div className="flex">
-            <div className="flex-1 m-4">
+            <div className="w-[45%] m-4">
               <OrderMonthBarChart />
             </div>
-            <div className="flex-1 m-4">
-              <OrderCityBarChart />
+            <div className="w-[55%] m-4">
+              <OrderSeasonBarChart />
             </div>
           </div>
           <div className="h-[25%] p-2">
@@ -213,7 +213,7 @@ function OrderManagement() {
                   </button>
                 </div>
               </div>
-              <div className="flex overflow-auto h-[220%] mt-2">
+              <div className="flex overflow-auto h-[200%] mt-2">
                 <table className="border-2 border-collapse mr-1 w-[100%]">
                   <thead>
                     <tr>

@@ -93,7 +93,7 @@ const TestOne = () => {
 
         {/* 今日訂單數量 */}
         <div className="bg-color2 rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold mb-4">今日訂單數量</h3>
+          <h3 className="text-lg font-semibold mb-4">目前訂單統計</h3>
           <div className="h-32 bg-color2 flex items-center justify-center text-gray-500">
             < ChartFour />
           </div>

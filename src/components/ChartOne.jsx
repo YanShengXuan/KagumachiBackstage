@@ -84,6 +84,9 @@ const ChartOne = () => {
         ticks: {
           stepSize: 1, // y 軸的步進值
         },
+        grid: {
+          drawOnChartArea: false, // 隱藏網格線
+        },
       },
     },
   };

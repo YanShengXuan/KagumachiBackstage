@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,41 +14,60 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend, BarElement);
 
-
 const Utils = {
   months: ({ count }) => ["櫃子", "桌子", "椅子", "沙發", "燈具", "寢具"].slice(0, count),
-  numbers: ({ count, min, max }) => Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min),
-
 };
 
 const ChartFour = () => {
+  const [data, setData] = useState([]);
+  const [chartData, setChartData] = useState(null);
 
-  const labels = Utils.months({ count: 6 });
-  const data = {
-    labels: labels,
-    datasets: [
-      {
-        label: 'Dataset 1',
-        data:  [60, 40, 40, 52, 70, 20],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor:"rgb(255, 99, 132)",
-        type: 'bar', 
-        order: 2
-      },
-      {
-        label: 'Dataset 2',
-        data:  [0, 30, 40, 80, 90, 110],
-        borderColor: "rgb(54, 162, 235)",
-        backgroundColor: "rgb(54, 162, 235)",
-        type: 'line', 
-        order: 1
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/myback/test');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    ]
+
+      const result = await response.json();
+      console.log('Fetched Data:', result);
+
+      // 將後端返回的物件轉為陣列格式
+      const formattedData = Object.entries(result).map(([key, value]) => ({
+        category: key,
+        count: value,
+      }));
+
+      setData(formattedData);
+
+      // 更新 Chart.js 所需的資料結構
+      const labels = Utils.months({ count: 6 });
+      const counts = formattedData.map((item) => item.count);
+
+      setChartData({
+        labels: labels,
+        datasets: [
+          {
+            label: 'Category Count',
+            data: counts,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            type: 'bar',
+          },
+        ],
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, 
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
@@ -57,17 +76,24 @@ const ChartFour = () => {
     scales: {
       y: {
         beginAtZero: true,
+        
         ticks: {
-          stepSize: 10, 
+          stepSize: 1,
+        },
+        grid: {
+          drawOnChartArea: false, // 隱藏網格線
         },
       },
     },
   };
 
   return (
-    <div className="w-auto  flex m-auto">
-      {/* <Line data={data} options={options} /> */}
-      <Bar data={data} options={options} />
+    <div className="w-auto flex m-auto">
+      {chartData ? (
+        <Bar data={chartData} options={options} />
+      ) : (
+        <p>Loading chart...</p>
+      )}
     </div>
   );
 };

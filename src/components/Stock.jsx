@@ -10,6 +10,7 @@ const Stock = () => {
             <thead>
               <tr className="bg-color2 border-black">
                 <th className="px-4 py-2">產品編號</th>
+                <th className="px-4 py-2">產品顏色</th>
                 <th className="px-4 py-2">目前庫存</th>
                 <th className="px-4 py-2">低於庫存數量</th>
                 <th className="px-4 py-2">供應商</th>
@@ -20,12 +21,6 @@ const Stock = () => {
               <tr>
                 <td className="border px-4 py-2">101</td>
                 <td className="border px-4 py-2">5</td>
-                <td className="border px-4 py-2">10</td>
-                <td className="border px-4 py-2">布萊德大公司</td>
-                <td className="border px-4 py-2">123-4567</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">101</td>
                 <td className="border px-4 py-2">5</td>
                 <td className="border px-4 py-2">10</td>
                 <td className="border px-4 py-2">布萊德大公司</td>
@@ -33,6 +28,15 @@ const Stock = () => {
               </tr>
               <tr>
                 <td className="border px-4 py-2">101</td>
+                <td className="border px-4 py-2">5</td>
+                <td className="border px-4 py-2">5</td>
+                <td className="border px-4 py-2">10</td>
+                <td className="border px-4 py-2">布萊德大公司</td>
+                <td className="border px-4 py-2">123-4567</td>
+              </tr>
+              <tr>
+                <td className="border px-4 py-2">101</td>
+                <td className="border px-4 py-2">5</td>
                 <td className="border px-4 py-2">5</td>
                 <td className="border px-4 py-2">10</td>
                 <td className="border px-4 py-2">布萊德大公司</td>

@@ -24,7 +24,7 @@ const ChartFour = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/myback/test');
+      const response = await fetch('http://localhost:8080/myback/quantity');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

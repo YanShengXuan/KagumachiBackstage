@@ -65,7 +65,7 @@ const Categories = () => {
             const updatedCategories = await fetchMainCategories();
             setmaincategories(updatedCategories);
 
-            setFormData({ categoryname: "", status: "sale" });
+            setFormData({categoryname: "", status: "sale"});
 
         } catch (error) {
             console.error("Error adding main category:", error);
@@ -83,7 +83,7 @@ const Categories = () => {
             const updatedSubFormData = {
                 categoryname: subFormData.categoryname,
                 status: subFormData.status,
-                mainCategory: { maincategoryid: Number(selectedMainId) },
+                mainCategory: {maincategoryid: Number(selectedMainId)},
             };
             const newSubcategory = await addSubCategory(updatedSubFormData);
 
@@ -96,7 +96,7 @@ const Categories = () => {
                 setSubcategories(updatedSubcategories);
             }
 
-            setSubFormData({ categoryname: "", status: "sale" });
+            setSubFormData({categoryname: "", status: "sale"});
 
         } catch (error) {
             console.error("Error adding subcategory:", error);
@@ -145,7 +145,7 @@ const Categories = () => {
             .catch((error) => console.error("Error deleting subcategory:", error));
     };
 
-    const inputstyle = "border border-[#161E24] focus:outline-none p-2 rounded-xl mr-1 ";
+    const inputstyle = "border border-[#161E24] focus:outline-none p-2 rounded-xl mr-1 w-full";
     const buttonstyle = "bg-[rgb(83,87,89)] text-white p-2 rounded-xl hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
     const thstyle = "border border-[#161E24] text-left p-4";
 
@@ -158,13 +158,13 @@ const Categories = () => {
                     <span className="bg-[#27333f] p-2 text-white rounded-xl">分類管理</span>
                 </div>
 
-                <div className=" pr-4 border-r border-gray-400 flex w-full">
+                <div className=" pr-4 flex w-full">
                     <div className=" w-[50%]">
-                        <h2 className="text-xl font-bold mb-4 mt-6">大分類管理</h2>
+                        <h2 className="text-xl font-bold mb-4 mt-6 ml-4">大分類管理</h2>
                         <form onSubmit={handleSubmit} className="my-4 mx-3">
                             <input
                                 placeholder="請輸入大分類"
-                                className={`${inputstyle} w-[22%]`}
+                                className={`${inputstyle} w-[200px]`}
                                 name="categoryname"
                                 value={formData.categoryname}
                                 onChange={(e) => handleChange(e, "main")}
@@ -189,11 +189,12 @@ const Categories = () => {
                             <table className="mx-auto w-[95%] bg-white">
                                 <thead>
                                 <tr>
-                                    <th className={thstyle}>ID</th>
-                                    <th className={thstyle}>大分類名稱</th>
-                                    <th className={thstyle}>狀態</th>
-                                    <th className={thstyle}>修改</th>
-                                    <th className={thstyle}>刪除</th>
+                                    <th className={`${thstyle} w-[10%] `}>ID</th>
+                                    <th className={`${thstyle} w-[10%]`}>大分類名稱</th>
+                                    <th className={`${thstyle} w-[10%]`}>活動</th>
+                                    <th className={`${thstyle} w-[10%]`}>狀態</th>
+                                    <th className={`${thstyle} w-[10%]`}>修改</th>
+                                    <th className={`${thstyle} w-[10%]`}>刪除</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -215,6 +216,9 @@ const Categories = () => {
                                             ) : (
                                                 category.categoryname
                                             )}
+                                        </td>
+                                        <td className={thstyle}>
+                                            {category.sales ? `${category.sales.name} (${category.sales.salesdesc})` : "無活動"}
                                         </td>
                                         <td className={thstyle}>
                                             {editMainCategory?.maincategoryid === category.maincategoryid ? (
@@ -268,59 +272,59 @@ const Categories = () => {
                         <div className="w-1/2 pl-3 ">
                             <h2 className="text-xl font-bold mb-1 mt-5">小分類管理</h2>
                             <div className="flex w-[200%] items-center">
-                            <div className="relative mx-1 w-[25%] mt-4">
-                                <select
-                                    className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
-                                    name="status"
-                                    onChange={handleMainCategoryChange}
-                                >
-                                    <option value="">選擇大分類</option>
-                                    {maincategories.map((category) => (
-                                        <option key={category.maincategoryid} value={category.maincategoryid}>
-                                            {category.categoryname}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">▼
-                                </div>
-                            </div>
-
-                            <form onSubmit={handleSubSubmit} className="flex items-center mt-4 ml-2 ">
-                                <input
-                                    placeholder="新增小分類"
-                                    className={`${inputstyle} w-[35%]`}
-                                    name="categoryname"
-                                    value={subFormData.categoryname}
-                                    onChange={(e) => handleChange(e, "sub")}
-                                />
-                                <div className="relative w-[40%] inline-block mx-3">
+                                <div className="relative mx-1 w-[25%] mt-4">
                                     <select
                                         className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
                                         name="status"
-                                        value={subFormData.status}
-                                        onChange={(e) => handleChange(e, "sub")}
+                                        onChange={handleMainCategoryChange}
                                     >
-                                        <option value="sale">上架中</option>
-                                        <option value="removed">下架</option>
+                                        <option value="">選擇大分類</option>
+                                        {maincategories.map((category) => (
+                                            <option key={category.maincategoryid} value={category.maincategoryid}>
+                                                {category.categoryname}
+                                            </option>
+                                        ))}
                                     </select>
-                                    <div
-                                        className="absolute inset-y-0 right-3 flex items-center justify-center pointer-events-none text-gray-700">
-                                        ▼
+                                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">▼
                                     </div>
                                 </div>
-                                <button className={buttonstyle}>新增</button>
-                            </form>
-                        </div>
+
+                                <form onSubmit={handleSubSubmit} className="flex items-center mt-4 ml-2 ">
+                                    <input
+                                        placeholder="新增小分類"
+                                        className={`${inputstyle} w-[200px]`}
+                                        name="categoryname"
+                                        value={subFormData.categoryname}
+                                        onChange={(e) => handleChange(e, "sub")}
+                                    />
+                                    <div className="relative w-[40%] inline-block mx-3">
+                                        <select
+                                            className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
+                                            name="status"
+                                            value={subFormData.status}
+                                            onChange={(e) => handleChange(e, "sub")}
+                                        >
+                                            <option value="sale">上架中</option>
+                                            <option value="removed">下架</option>
+                                        </select>
+                                        <div
+                                            className="absolute inset-y-0 right-3 flex items-center justify-center pointer-events-none text-gray-700">
+                                            ▼
+                                        </div>
+                                    </div>
+                                    <button className={`${buttonstyle} w-[100px]`}>新增</button>
+                                </form>
+                            </div>
                         </div>
 
                         <table className="mx-auto w-[95%] bg-white mt-4">
                             <thead>
                             <tr>
-                                <th className={thstyle}>ID</th>
-                                <th className={thstyle}>小分類名稱</th>
-                                <th className={thstyle}>狀態</th>
-                                <th className={thstyle}>修改</th>
-                                <th className={thstyle}>刪除</th>
+                                <th className={`${thstyle} w-[10%]`}>ID</th>
+                                <th className={`${thstyle} w-[10%]`}>小分類名稱</th>
+                                <th className={`${thstyle} w-[10%]`}>狀態</th>
+                                <th className={`${thstyle} w-[10%]`}>修改</th>
+                                <th className={`${thstyle} w-[10%]`}>刪除</th>
                             </tr>
                             </thead>
                             <tbody>

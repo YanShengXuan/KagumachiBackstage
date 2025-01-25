@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 
 const MemberPage = () => {
     const [member, setMember] = useState([]);
+    const [latestOrders, setLatestOrders] = useState({});
     const [editMember, setEditMember] = useState(null);
     const [formData, setFormData] = useState({});
     const [searchMember, setSearchMember] = useState("");
@@ -12,6 +13,21 @@ const MemberPage = () => {
             .then((data) => setMember(data))
             .catch((error) => console.error("Error fetching main categories:", error));
     }, []);
+
+    const fetchLatestOrder = async (memberid) => {
+        try {
+            const response = await fetch(`http://localhost:8080/order/latest/${memberid}`);
+            if (!response.ok) throw new Error("No Order Found");
+
+            const orderData = await response.json();
+            setLatestOrders((prev) => ({
+                ...prev,
+                [memberid]: orderData.orderid, // ⬅️ 存入對應會員的訂單 ID
+            }));
+        } catch (error) {
+            console.error(`Error fetching order for member ${memberid}:`, error);
+        }
+    };
 
     //更新會員編輯
     const handleEditClick = (member) => {
@@ -100,7 +116,7 @@ const MemberPage = () => {
 
     const inputstyle = "mt-10 border border-[#161E24] focus:outline-none p-2 rounded-xl mr-3 w-[20%] hover:border-2";
     const editInputStyle = "border border-[#161E24] focus:outline-none p-2 rounded-xl w-[99%] hover:border-2";
-    const thstyle = "border border-[#161E24] text-sm text-left p-2";
+    const thstyle = "border border-[#161E24] text-sm text-left p-2 ";
     const editButtonStyle = "bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[80%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
     return (
         <div className="w-full bg-[#A6A6A6] pt-10 h-full min-h-screen">
@@ -120,7 +136,8 @@ const MemberPage = () => {
 
                 </div>
 
-                    <table className="mt-10 w-full h-full bg-white">
+                <div className="mt-10 w-full max-h-[75vh] overflow-auto border border-gray-300">
+                    <table className="w-full bg-white">
                         <thead>
                         <tr>
                             <th className={`${thstyle} w-[2%]`}>ID</th>
@@ -218,7 +235,9 @@ const MemberPage = () => {
                                         m.address
                                     )}
                                 </td>
-                                <td className={thstyle}>訂單編號</td>
+                                <td className={thstyle}>
+                                    {latestOrders[m.memberid] || "無訂單"}
+                                </td>
                                 <td className={thstyle}>{m.registrationdate}</td>
                                 <td className={thstyle}>
                                     {editMember === m.memberid ? (
@@ -253,6 +272,7 @@ const MemberPage = () => {
                         </tbody>
                     </table>
                 </div>
+            </div>
 
             </div>
             );

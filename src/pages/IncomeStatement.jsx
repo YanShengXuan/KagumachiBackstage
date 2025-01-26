@@ -2,18 +2,23 @@ import React, { useState } from 'react';
 import DateSelector from '../components/DateSelector.jsx';
 import Report from '../components/Report.jsx';
 import GaugeChart from '../components/GaugeChart.jsx';
+import BarChart from '../components/BarChart.jsx';
 
 // 模擬動態獲取數據
 const fetchData = () => {
     // 生成範圍內的隨機數
     const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    // 營業收入、成本和毛利的隨機數生成邏輯
+    // 會計項目的隨機數生成
     const revenue = getRandomNumber(50_000, 150_000); // 隨機營業收入（5萬 ~ 15萬）
     const cost = getRandomNumber(30_000, revenue);    // 隨機營業成本（3萬 ~ 收入）
     const profit = revenue - cost;                    // 毛利（收入 - 成本）
+    const otherIncome = getRandomNumber(1_000, 5000); // 業外收入
+    const preTaxProfit = profit + otherIncome; // 稅前純益
+    const tax = getRandomNumber(5_000, 10_000); // 所得稅
+    const netProfit = preTaxProfit - tax; // 稅後純益
 
-    return { revenue, cost, profit };
+    return { revenue, cost, profit, otherIncome, preTaxProfit, tax, netProfit };
 };
 
 const IncomeStatement = () => {
@@ -50,11 +55,21 @@ const IncomeStatement = () => {
                 </div>
                 <div className="mt-6 flex justify-between w-[95%] mx-auto">
                     {data && (
-                        <>
-                            <GaugeChart value={100} label="營業收入" color="#4CAF50" />
-                            <GaugeChart value={costPercentage} label="營業成本" color="#FFC107" />
-                            <GaugeChart value={profitPercentage} label="營業毛利" color="#22d30e" />
-                        </>
+                        <div className="mt-6 flex w-full">
+                        {/* 左側儀表圖 */}
+                        <div className="w-1/2 flex items-center justify-center">
+                            <GaugeChart
+                                data={[data.cost, data.profit]} // 營業成本與營業毛利
+                                labels={["營業成本", "營業毛利"]}
+                                colors={["#FFC107", "#4CAF50"]}
+                                title="營業收入"
+                            />
+                        </div>
+                        {/* 右側柱狀圖 */}
+                        <div className="w-1/2">
+                            <BarChart data={data} />
+                        </div>
+                    </div>
                     )}
                 </div>
             </div>

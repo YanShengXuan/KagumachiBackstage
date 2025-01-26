@@ -5,24 +5,19 @@ import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 // 註冊 Chart.js 必要組件
 Chart.register(ArcElement, Tooltip, Legend);
 
-const GaugeChart = ({ value, label, color }) => {
+const GaugeChart = ({ data, labels, colors, title }) => {
     // 圖表數據
     const [chartData, setChartData] = useState({
-        labels: ["Filled", "Remaining"],
+        labels: labels,
         datasets: [
             {
-                data: [value, 100 - value], // 第一個值為完成比例，第二個為剩餘比例
-                backgroundColor: [color, "#F3F4F6"], // 已完成與剩餘部分顏色
+                data: data, 
+                backgroundColor: colors, 
                 borderWidth: 0, // 去除邊框
-                cutout: "80%", // 圓心的空洞大小
+                cutout: "75%", // 圓心的空洞大小
                 rotation: -90, // 起始角度
                 circumference: 180, // 半圓形範圍
                 borderRightRadius:10,
-
-                // borderTopLeftRadius:0, // 添加圓弧效果
-                // borderTopRightRadius:10,
-                // borderBottomRightRadius:10,
-                // borderBottomLeftRadius:0,
             },
         ],
     });
@@ -30,11 +25,11 @@ const GaugeChart = ({ value, label, color }) => {
     // 當 value 或 color 發生變化時更新數據
     useEffect(() => {
         setChartData({
-            labels: ["Filled", "Remaining"],
+            labels: labels,
             datasets: [
                 {
-                    data: [value, 100 - value],
-                    backgroundColor: [color, "#F3F4F6"],
+                    data: data,
+                    backgroundColor: colors,
                     borderWidth: 0,
                     cutout: "80%",
                     rotation: -90,
@@ -42,29 +37,34 @@ const GaugeChart = ({ value, label, color }) => {
                 },
             ],
         });
-    }, [value, color]);
+    }, [data, labels, colors]);
+
+    const total = data.reduce((sum, value) => sum + value, 0); // 總數（營業收入）
+    const percentages = data.map((value) => ((value / total) * 100).toFixed(1)); // 百分比計算
 
     // 圖表選項
     const options = {
         plugins: {
-            legend: { display: false }, // 隱藏圖例
-            tooltip: { enabled: false }, // 隱藏工具提示
+            legend: { display: true }, // 隱藏圖例
+            tooltip: { enabled: true }, // 隱藏工具提示
         },
         responsive: true,
         maintainAspectRatio: false,
     };
 
     return (
-        <div className="w-1/3 flex flex-col items-center">
-            {/* 儀表圖 */}
-            <div className="relative w-full h-40">
+        <div className="w-auto flex flex-col items-center">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">{title}</h3>
+            <div className="relative w-96 h-72">
                 <Doughnut data={chartData} options={options} />
-                {/* 圖表中心文字 */}
-                <div className="absolute inset-0 flex items-center justify-center text-center">
-                    <div className="absolute bottom-0 left-0 w-full flex flex-col items-center text-center">
-                        <p className="text-3xl font-bold text-gray-800">{value}%</p>
-                        <p className="text-base text-gray-500">{label}</p>
-                    </div>
+                {/* 圖表中心顯示百分比 */}
+                <div className="absolute bottom-10 left-20 right-20 flex flex-col items-center justify-center">
+                    {labels.map((label, index) => (
+                        <div key={index} className="text-center">
+                            <p className="text-base font-medium text-gray-700">{label}</p>
+                            <p className="text-lg font-bold text-gray-900">{percentages[index]}%</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

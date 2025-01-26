@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DateSelector = ({ onSelectionChange }) => {
     const [year, setYear] = useState(null);
@@ -15,6 +15,22 @@ const DateSelector = ({ onSelectionChange }) => {
             default: return [];
         }
     };
+
+    // 初始化為當前時間的前一個月
+    useEffect(() => {
+        const now = new Date();
+        const prevMonth = new Date(now.setMonth(now.getMonth() - 1));
+        const initialYear = prevMonth.getFullYear();
+        const initialMonth = prevMonth.getMonth() + 1; // getMonth() 返回 0-11，需 +1
+        const initialQuarter = Math.ceil(initialMonth / 3); // 計算對應的季度
+
+        setYear(initialYear);
+        setQuarter(initialQuarter);
+        setMonth(initialMonth);
+
+        // 初始觸發回調
+        onSelectionChange(initialYear, initialQuarter, initialMonth);
+    }, []);
 
     const handleYearChange = (e) => {
         const newYear = e.target.value === "請選擇年份" ? null : parseInt(e.target.value, 10);
@@ -48,7 +64,9 @@ const DateSelector = ({ onSelectionChange }) => {
                 >
                     <option>請選擇年份</option>
                     {[2024, 2025].map((yr) => (
-                        <option key={yr} value={yr}>{yr}</option>
+                        <option key={yr} value={yr}>
+                            {yr}
+                        </option>
                     ))}
                 </select>
             </div>
@@ -62,7 +80,9 @@ const DateSelector = ({ onSelectionChange }) => {
                 >
                     <option>請選擇季度</option>
                     {[1, 2, 3, 4].map((qt) => (
-                        <option key={qt} value={qt}>第 {qt} 季</option>
+                        <option key={qt} value={qt}>
+                            第 {qt} 季
+                        </option>
                     ))}
                 </select>
             </div>
@@ -76,7 +96,9 @@ const DateSelector = ({ onSelectionChange }) => {
                 >
                     <option>請選擇月份</option>
                     {getMonthsForQuarter(quarter).map((mn) => (
-                        <option key={mn} value={mn}>{mn} 月</option>
+                        <option key={mn} value={mn}>
+                            {mn} 月
+                        </option>
                     ))}
                 </select>
             </div>

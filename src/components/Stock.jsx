@@ -5,7 +5,7 @@ const Stock = () => {
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/myback/test`, {
+      const response = await fetch(`http://localhost:8080/myback/getstock`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

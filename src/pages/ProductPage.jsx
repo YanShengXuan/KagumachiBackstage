@@ -97,9 +97,9 @@ const ProductPage = () => {
             setSearchParams((prev) => ({...prev, [e.target.name]: e.target.value}));
         };
 
-        const handleSearch = () => {
-            fetchProductList(searchParams);
-        };
+        // const handleSearch = () => {
+        //     fetchProductList(searchParams);
+        // };
 
         useEffect(() => {
             fetchProductList();
@@ -221,8 +221,8 @@ const ProductPage = () => {
                     </div>
 
 
-                    <div className="mt-10 w-[100%] overflow-x-auto ">
-                        <table className=" min-w-[1600px] table-fixed bg-white">
+                    <div className="mt-10 w-[100%] overflow-x-auto overflow-auto max-h-[75vh]">
+                        <table className=" min-w-[1600px] table-fixed bg-white ">
                             <thead>
                             <tr>
                                 <th className={`${thstyle} min-w-[50px]`}>ID</th>
@@ -240,7 +240,7 @@ const ProductPage = () => {
                                 <th className={`${thstyle} min-w-[120px]`}>商品狀態</th>
                                 <th className={`${thstyle} min-w-[120px]`}>總共售出數量</th>
                                 <th className={`${thstyle} min-w-[80px]`}>評價</th>
-                                <th className={`${thstyle} min-w-[250px]`}>商品描述</th>
+                                {/*<th className={`${thstyle} min-w-[250px]`}>商品描述</th>*/}
                                 <th className={`${thstyle} min-w-[150px]`}>更新日期</th>
                                 <th className={`${thstyle} min-w-[100px]`}>修改</th>
                                 <th className={`${thstyle} min-w-[100px]`}>刪除</th>
@@ -313,13 +313,13 @@ const ProductPage = () => {
                                         <td className={thstyle}>{product.status}</td>
                                         <td className={thstyle}>{product.unitsold}</td>
                                         <td className={thstyle}>{product.rating}</td>
-                                        <td className={`${thstyle} p-1.5 m-0 h-26`}>
-                                            <div
-                                                className="overflow-y-auto h-[150px]"
-                                            >
-                                                {product.productdescription}
-                                            </div>
-                                        </td>
+                                        {/*<td className={`${thstyle} p-1.5 m-0 h-26`}>*/}
+                                        {/*    <div*/}
+                                        {/*        className="overflow-y-auto h-[150px]"*/}
+                                        {/*    >*/}
+                                        {/*        {product.productdescription}*/}
+                                        {/*    </div>*/}
+                                        {/*</td>*/}
                                         <td className={thstyle}>{new Date(product.updateat).toLocaleDateString()}</td>
                                         <td className={thstyle}>
 

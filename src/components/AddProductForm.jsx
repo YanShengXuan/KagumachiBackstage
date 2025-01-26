@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useCallback, useRef} from "react";
 
 const AddProductForm = ({ onClose, product, onSubmit  }) => {
     const [formData, setFormData] = useState({
@@ -12,16 +12,24 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         depth: "",
         unitprice: "",
         productcost: "",
-        status: "上架中",
+        status: product?.status || "Active",
         updateAt: new Date().toISOString().split("T")[0], // 自動填入今天日期
         productColors: [{ colorname: "", stock: "", minstock: "", productImages: [{ imageurl: "", isprimary: false }] }],
     });
 
-
+    const [selectedSale, setSelectedSale] = useState(null);
     const [mainCategory, setMainCategory] = useState([]); // 主類別選單
     const [subCategory, setSubCategory] = useState([]); // 副類別選單
     const [supplier, setSupplier] = useState([]); // 復類別選單
     const [error, setError] = useState(null);
+    const [showAddSupplierModal, setShowAddSupplierModal] = useState(false);
+    const [newSupplier, setNewSupplier] = useState({
+        name: "",
+        address: "",
+        phone: "",
+        contactor: ""
+    });
+
 
     useEffect(() => {
         if (product) {
@@ -76,6 +84,21 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         fetchMainCategories();
     }, []);
 
+    useEffect(() => {
+        if (!formData.maincategoryid) {
+            setSelectedSale(null);
+            return;
+        }
+
+        // 找出對應的主分類
+        const selectedMainCategory = mainCategory.find(
+            (main) => main.maincategoryid.toString() === formData.maincategoryid.toString()
+        );
+
+        // 設定當前活動
+        setSelectedSale(selectedMainCategory?.sales || null);
+    }, [formData.maincategoryid, mainCategory]);
+
     // 副類別
     useEffect(() => {
         const fetchSubCategories = async () => {
@@ -96,20 +119,55 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         fetchSubCategories();
     }, [formData.maincategoryid]);
 
-    //查詢廠商
-    useEffect(() => {
-        const fetchSupplier = async () => {
-            try {
-                const response = await fetch("http://localhost:8080/products/searchSuppliers");
-                const data = await response.json();
-                setSupplier(data);
-            } catch (error) {
-                console.error("Failed to fetch supplier:", error);
-            }
-        };
-
-        fetchSupplier();
+    const fetchSupplier = useCallback(async () => {
+        try {
+            const response = await fetch("http://localhost:8080/products/searchSuppliers");
+            const data = await response.json();
+            setSupplier(data);
+        } catch (error) {
+            console.error("Failed to fetch supplier:", error);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchSupplier();
+    }, [fetchSupplier]);
+
+
+    const handleAddSupplier = async () => {
+        if (!newSupplier.name || !newSupplier.address || !newSupplier.phone || !newSupplier.contactor) {
+            alert("請填寫完整的廠商資訊！");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080/suppliers/addsupplier", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    supplierName: newSupplier.name,
+                    supplierAddress: newSupplier.address,
+                    supplierPhone: newSupplier.phone,
+                    contactor: newSupplier.contactor
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("新增廠商失敗");
+            }
+
+            alert("廠商新增成功！");
+
+            await fetchSupplier();
+
+            setNewSupplier({ name: "", address: "", phone: "", contactor: "" });
+            setShowAddSupplierModal(false);
+
+        } catch (error) {
+            console.error("Error adding supplier:", error);
+            alert("新增失敗，請稍後再試！");
+        }
+    };
 
 
     // 處理輸入變化
@@ -131,7 +189,9 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
             }
             setFormData({ ...formData, productColors: updatedColors });
         } else {
-            setFormData({ ...formData, [field]: e.target.value });
+            if (formData[field] === e.target.value) return;
+            setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+
         }
     };
 
@@ -189,6 +249,20 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!formData.productname || !formData.maincategoryid || !formData.subcategoryid) {
+            // alert("請填寫商品名稱、主類別及副類別！");
+            return;
+        }
+
+        let calculatedDiscountPrice = formData.unitprice;
+        if (selectedSale && selectedSale.discount) {
+            calculatedDiscountPrice = Math.round(
+                formData.unitprice * (1 - selectedSale.discount / 100)
+            );
+        }
+
+
+
         const formattedData = {
             productname: formData.productname,
             width: formData.width.toString(),
@@ -196,6 +270,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
             depth: formData.depth.toString(),
             productdescription:formData.productdescription,
             unitprice: formData.unitprice.toString(),
+            discountprice: calculatedDiscountPrice.toString(),
             productcost: formData.productcost.toString(),
             maincategoryid: formData.maincategoryid.toString(),
             subcategoryid: formData.subcategoryid.toString(),
@@ -334,7 +409,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                     {error && <p style={{color: "red"}}>{error}</p>}
 
                     <div>
-                        <label className={spanStyle}>商品名稱:</label>
+                        <label className={spanStyle}>商品名稱:(必填)</label>
                         <input
                             className={inputStyle}
                             placeholder="商品名稱"
@@ -347,7 +422,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                     <div>
                         <label className={spanStyle}>商品描述:</label>
                         <input
-                            className={inputStyle}
+                            className={`${inputStyle} h-[200px] w-[70%]`}
                             placeholder="商品描述"
                             type="text"
                             value={formData.productdescription}
@@ -356,7 +431,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                     </div>
 
                     <div>
-                        <label className={selectSpanStyle}>主類別:</label>
+                        <label className={selectSpanStyle}>主類別:(必選)</label>
                         <div className="relative w-[28.5%] inline-block mx-3 mt-4">
                             <select
                                 className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
@@ -376,9 +451,18 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                             </div>
                         </div>
                     </div>
+                    <div>
+                        {selectedSale && (
+                            <div className="bg-gray-100 p-4 rounded-lg mt-4">
+                                <span className=" font-semibold">目前活動: {selectedSale.salesname}</span>
+                                <span className="text-gray-700">{selectedSale.salesdesc}</span>
+                                <p className="text-red-500 font-bold">折扣: {selectedSale.discount}%</p>
+                            </div>
+                        )}
+                    </div>
 
                     <div>
-                        <label className={selectSpanStyle}>副類別:</label>
+                        <label className={selectSpanStyle}>副類別:(必選)</label>
                         <div className="relative w-[28.5%] inline-block mx-3 mt-4">
                             <select
                                 className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
@@ -398,6 +482,28 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                             </div>
                         </div>
                     </div>
+
+                    <div>
+                        <label className={selectSpanStyle}>商品狀態:</label>
+                        <div className="relative w-[28.5%] inline-block mx-3 mt-4">
+                            <select
+                                className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
+                                value={formData.status || "Active"}
+                                onChange={(e) => handleInputChange(e, "status")}
+                            >
+                                <option value="">選擇狀態</option>
+                                <option value="Active"> 上架中</option>
+                                <option value="Deactivate"> 下架中</option>
+                            </select>
+                            <div
+                                className="absolute inset-y-0 right-3 flex items-center justify-center pointer-events-none text-gray-700">
+
+                                ▼
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div>
                         <label className={selectSpanStyle}>廠商:</label>
                         <div className="relative w-[28.5%] inline-block mx-3 mt-4">
@@ -418,9 +524,67 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                                 ▼
                             </div>
                         </div>
+                        <button
+                            type="button"
+                            onClick={() => setShowAddSupplierModal(true)}
+                            className={`${buttonStyle} ml-3 w-[120px]`}
+                        >
+                            ➕ 新增廠商
+                        </button>
                     </div>
+                    <div>
+                        {showAddSupplierModal && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                                <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-w-[500px]">
+                                    <h2 className="text-xl mb-4">新增廠商</h2>
 
+                                    <input
+                                        className={inputStyle}
+                                        type="text"
+                                        placeholder="廠商名稱"
+                                        value={newSupplier.name}
+                                        onChange={(e) => setNewSupplier({...newSupplier, name: e.target.value})}
+                                    />
+                                    <input
+                                        className={inputStyle}
+                                        type="text"
+                                        placeholder="廠商地址"
+                                        value={newSupplier.address}
+                                        onChange={(e) => setNewSupplier({...newSupplier, address: e.target.value})}
+                                    />
+                                    <input
+                                        className={inputStyle}
+                                        type="text"
+                                        placeholder="電話號碼"
+                                        value={newSupplier.phone}
+                                        onChange={(e) => setNewSupplier({...newSupplier, phone: e.target.value})}
+                                    />
+                                    <input
+                                        className={inputStyle}
+                                        type="text"
+                                        placeholder="聯絡人"
+                                        value={newSupplier.contactor}
+                                        onChange={(e) => setNewSupplier({...newSupplier, contactor: e.target.value})}
+                                    />
 
+                                    <div className="flex justify-center mt-4">
+                                        <button
+                                            className={`${buttonStyle} mx-2`}
+                                            onClick={handleAddSupplier}
+                                        >
+                                            新增
+                                        </button>
+                                        <button
+                                            className={`${buttonStyle} mx-2`}
+                                            onClick={() => setShowAddSupplierModal(false)}
+                                        >
+                                            取消
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
 
                     <div>
@@ -467,26 +631,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                             onChange={(e) => handleInputChange(e, "productcost")}
                         />
                     </div>
-                    <div>
-                        <label className={selectSpanStyle}>商品狀態:</label>
-                        <div className="relative w-[28.5%] inline-block mx-3 mt-4">
-                            <select
-                                className="w-full px-4 py-2 border border-[#161E24] text-gray-700 focus:outline-none appearance-none rounded-xl"
-                                value={formData.status}
-                                onChange={(e) => handleInputChange(e, "status")}
-                            >
-                                <option value="">選擇狀態</option>
-                                <option value="Active"> 上架中</option>
-                                <option value="Deactivate"> 下架中</option>
-                            </select>
-                            <div
-                                className="absolute inset-y-0 right-3 flex items-center justify-center pointer-events-none text-gray-700">
-                                ▼
-                            </div>
-                        </div>
 
-
-                    </div>
 
                     <div className="mt-6 text-xl">商品顏色</div>
 

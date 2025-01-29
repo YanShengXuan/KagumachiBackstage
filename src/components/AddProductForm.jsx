@@ -250,10 +250,20 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         e.preventDefault();
 
         if (!formData.productname || !formData.maincategoryid || !formData.subcategoryid) {
-            // alert("請填寫商品名稱、主類別及副類別！");
+            alert("請填寫商品名稱、主類別及副類別！");
             return;
         }
 
+        if (!formData.unitprice || isNaN(formData.unitprice) || Number(formData.unitprice) <= 0) {
+            alert("請輸入有效的單價！");
+            return;
+        }
+
+
+        if (!formData.productColors.length || formData.productColors.some(color => !color.colorname.trim())) {
+            alert("請至少新增一個顏色並填寫名稱！");
+            return;
+        }
         let calculatedDiscountPrice = formData.unitprice;
         if (selectedSale && selectedSale.discount) {
             calculatedDiscountPrice = Math.round(
@@ -419,16 +429,17 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                         />
                     </div>
 
-                    <div>
-                        <label className={spanStyle}>商品描述:</label>
-                        <input
-                            className={`${inputStyle} h-[200px] w-[70%]`}
+                    <div className="flex items-start w-[70%]">
+                        <label className={`${spanStyle} w-[47%] mt-2`}>商品描述:</label>
+                        <textarea
+                            className={`${inputStyle} h-[200px] w-full`}
                             placeholder="商品描述"
                             type="text"
                             value={formData.productdescription}
                             onChange={(e) => handleInputChange(e, "productdescription")}
                         />
                     </div>
+
 
                     <div>
                         <label className={selectSpanStyle}>主類別:(必選)</label>
@@ -612,7 +623,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                         />
                     </div>
                     <div>
-                        <label className={spanStyle}>單價:</label>
+                        <label className={spanStyle}>單價:(必填)</label>
                         <input
                             className={inputStyle}
                             placeholder="單價"
@@ -633,7 +644,7 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                     </div>
 
 
-                    <div className="mt-6 text-xl">商品顏色</div>
+                    <div className="mt-6 text-xl">商品顏色(必填)</div>
 
                     <button
                         type="button"

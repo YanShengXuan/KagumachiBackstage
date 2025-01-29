@@ -6,6 +6,7 @@ import ChartOne from '../components/ChartOne'
 import Stock from '../components/Stock';
 import WeiSales from '../components/WeiSales';
 import WeiMessage from '../components/WeiMessage';
+import WeiPic from '../components/WeiPic';
 
 
 const TestOne = () => {
@@ -64,14 +65,8 @@ const TestOne = () => {
         {/* 數據與報表分析 */}
         <div className="bg-color2 rounded-lg shadow p-4 col-span-2 row-span-2">
           <Link to="/incomeStatement">
-            <h3 className="text-lg font-semibold mb-4">數據與報表分析</h3>
-            <p className="text-gray-700">總收入: <span className="font-semibold">1,000,000</span></p>
-            <p className="text-gray-700">總支出: <span className="font-semibold">5,000</span></p>
-            <p className="text-gray-700">利潤: <span className="font-semibold">5,000,000</span></p>
-            <div className="bg-red-500 h-4 rounded-full text-xs text-center text-white" style={{ width: "80%" }}>
-              80%
-            </div>
             {/* <progress className="bg-red-500 h-4 rounded-full text-xs text-center text-white" max="100" value="80" style={{backgroundcolor:"rgb(250, 8, 8)",width: "100%" }} >80%</progress> */}
+          <WeiPic />
           </Link>
         </div>
 

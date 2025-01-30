@@ -13,6 +13,8 @@ import MemberPage from "./pages/MemberPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import Categories from "./pages/Categories.jsx";
 import Chat from "./pages/Chat";
+import Messages from "./components/Messages.jsx";
+import AutoChatSetting from "./components/AutoChatSetting.jsx";
 import "./App.css";
 import SupplierManagement from "./pages/SupplierManagement.jsx";
 import Sales from "./pages/Sales.jsx";
@@ -37,7 +39,10 @@ function App() {
           <Route path="memberpage" element={<MemberPage />} />
           <Route path="productpage" element={<ProductPage />} />
           <Route path="categories" element={<Categories />} />
-          <Route path="chat" element={<Chat />} />
+          <Route path="chat" element={<Chat />} >
+            <Route path="messages" element={<Messages />} />
+            <Route path="autochatsetting" element={<AutoChatSetting />} />
+          </Route>
           <Route path="suppliermanagement" element={<SupplierManagement />} />
           <Route path="sales" element={<Sales />} />
           <Route path="salesforclasses" element={<SalesforClasses />} />

@@ -40,52 +40,6 @@ const Stock = () => {
   }, []);
 
   return (
-    // <>
-    //   <table className="table-auto w-full text-left border-collapse ">
-    //     <thead>
-    //       <tr className="bg-color2 border-black">
-    //         <th className="px-4 py-2">產品編號</th>
-    //         <th className="px-4 py-2">產品顏色</th>
-    //         <th className="px-4 py-2">目前庫存</th>
-    //         <th className="px-4 py-2">低於庫存數量</th>
-    //         <th className="px-4 py-2">供應商</th>
-    //         <th className="px-4 py-2">供應商電話</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {/* <tr>
-    //             <td className="border px-4 py-2">101</td>
-    //             <td className="border px-4 py-2">5</td>
-    //             <td className="border px-4 py-2">5</td>
-    //             <td className="border px-4 py-2">10</td>
-    //             <td className="border px-4 py-2">布萊德大公司</td>
-    //             <td className="border px-4 py-2">123-4567</td>
-    //           </tr>
-    //           <tr>
-    //             <td className="border px-4 py-2">101</td>
-    //             <td className="border px-4 py-2">5</td>
-    //             <td className="border px-4 py-2">5</td>
-    //             <td className="border px-4 py-2">10</td>
-    //             <td className="border px-4 py-2">布萊德大公司</td>
-    //             <td className="border px-4 py-2">123-4567</td>
-    //           </tr> */}
-          
-    //         {data.map((item, index) => (
-    //           <tr key={index} className="border-t">
-    //             <td className="border px-4 py-2">{item.productid}</td>
-    //             <td className="border px-4 py-2">{item.colorsid}</td>
-    //             <td className="border px-4 py-2">{item.stock}</td>
-    //             <td className="border px-4 py-2">{item.minstock}</td>
-    //             <td className="border px-4 py-2">{item.name}</td>
-    //             <td className="border px-4 py-2">{item.phone}</td>
-    //           </tr>
-    //         ))}
-          
-    //     </tbody>
-    //   </table>
-
-
-    // </>
     <div className="p-4 max-w-4xl mx-auto bg-color2 rounded-lg shadow-md">
       <div className="max-h-48 overflow-y-auto border rounded-lg">
         <table className="table-auto w-full text-left">

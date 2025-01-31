@@ -13,7 +13,7 @@ const Navbar = () => {
   const isIncomeStatement = useMatch("/incomeStatement");
   const isShipRateTable = useMatch("/ship/shipratetable");
   const isShipOrderTable = useMatch("/ship/shipordertable");
-  const isChat = useMatch("/chat");
+  const isChat = useMatch("/chat/messages");
   const isSetting = useMatch("/setting");
   
   const link =
@@ -100,7 +100,7 @@ const Navbar = () => {
                   配送/物流
                 </div>
               </Link>
-              <Link to="chat">
+              <Link to="chat/messages">
                 <div
                   className={`${link} ${isChat ? "bg-color1" : "bg-color2"}`}
                 >

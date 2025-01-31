@@ -88,7 +88,7 @@ const TestOne = () => {
 
         {/* 客戶投訴 */}
         <div className="bg-color2 rounded-lg shadow p-4">
-          <Link to="/chat">
+          <Link to="/chat/messages">
             <h3 className="text-lg font-semibold mb-4">客戶訊息通知</h3>
             <ul className="list-disc ml-6 space-y-1 text-gray-700">
               <WeiMessage />

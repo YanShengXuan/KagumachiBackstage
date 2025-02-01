@@ -18,7 +18,7 @@ const WeiMessage = () => {
 
       const result = await response.json();
       console.log(result);
-      const hasUnreadMessage = result.some((item) => item.isbackread === true);
+      const hasUnreadMessage = result.some((item) => item.isbackread === false);
       setHasUnread(hasUnreadMessage);
     } catch (error) {
       console.error("Error:", error);

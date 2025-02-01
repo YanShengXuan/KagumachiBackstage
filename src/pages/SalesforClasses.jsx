@@ -61,6 +61,7 @@ function SalesforClasses() {
             defaultValue={record.saleoption}
             options={options}
             onChange={(e) => handleSelectChange(e, "saleoption")}
+            style={{ width: "100%" }}
           />
         ) : (
           text
@@ -109,7 +110,8 @@ function SalesforClasses() {
       return item;
     });
 
-    fetch("http://localhost:8080/sales/updatecategory", {
+    // 更新分類活動&商品折扣價
+    fetch("http://localhost:8080/sales/updatecategoryanddiscount", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

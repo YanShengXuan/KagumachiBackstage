@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
 
 const MemberPage = () => {
     const [member, setMember] = useState([]);
@@ -16,18 +17,23 @@ const MemberPage = () => {
 
     const fetchLatestOrder = async (memberid) => {
         try {
-            const response = await fetch(`http://localhost:8080/order/latest/${memberid}`);
+            const response = await fetch(`http://localhost:8080/member/latest/${memberid}`);
             if (!response.ok) throw new Error("No Order Found");
 
             const orderData = await response.json();
             setLatestOrders((prev) => ({
                 ...prev,
-                [memberid]: orderData.orderid, // ⬅️ 存入對應會員的訂單 ID
+                [memberid]:{ orderid: orderData.orderid, orderserial: orderData.orderserial },
             }));
         } catch (error) {
             console.error(`Error fetching order for member ${memberid}:`, error);
         }
     };
+    useEffect(() => {
+        if (member.length > 0) {
+            member.forEach((m) => fetchLatestOrder(m.memberid));
+        }
+    }, [member]);
 
     //更新會員編輯
     const handleEditClick = (member) => {
@@ -236,7 +242,19 @@ const MemberPage = () => {
                                     )}
                                 </td>
                                 <td className={thstyle}>
-                                    {latestOrders[m.memberid] || "無訂單"}
+                                    {latestOrders[m.memberid] ? (
+                                        <Link
+                                            to={{
+                                                pathname: "/orderManagement",
+                                            }}
+                                            state={{ orderId: latestOrders[m.memberid].orderid }}
+                                            className="text-blue-500 underline cursor-pointer hover:text-blue-700"
+                                        >
+                                            {latestOrders[m.memberid].orderserial}
+                                        </Link>
+                                    ) : (
+                                        "無訂單"
+                                    )}
                                 </td>
                                 <td className={thstyle}>{m.registrationdate}</td>
                                 <td className={thstyle}>

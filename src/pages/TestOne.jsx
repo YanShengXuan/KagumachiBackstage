@@ -54,10 +54,18 @@ const TestOne = () => {
         </div>
 
         {/* 熱銷商品排行 */}
-        <div className="bg-color2 rounded-lg shadow p-4">
+        {/* <div className="bg-color2 rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold mb-4">熱銷商品排行</h3>
           <ol className="list-decimal ml-6 space-y-1 text-gray-700">
             {productnames.map((name, index) => (
+              <li key={index}>{name}</li>
+            ))}
+          </ol>
+        </div> */}
+        <div className="bg-color2 rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold mb-4">熱銷商品排行</h3>
+          <ol className="list-decimal ml-6 space-y-1 text-gray-700">
+            {productnames.slice(0,5).map((name, index) => (
               <li key={index}>{name}</li>
             ))}
           </ol>
@@ -66,7 +74,7 @@ const TestOne = () => {
         <div className="bg-color2 rounded-lg shadow p-4 col-span-2 row-span-2">
           <Link to="/incomeStatement">
             {/* <progress className="bg-red-500 h-4 rounded-full text-xs text-center text-white" max="100" value="80" style={{backgroundcolor:"rgb(250, 8, 8)",width: "100%" }} >80%</progress> */}
-          <WeiPic />
+            <WeiPic />
           </Link>
         </div>
 
@@ -80,7 +88,7 @@ const TestOne = () => {
 
         {/* 客戶投訴 */}
         <div className="bg-color2 rounded-lg shadow p-4">
-          <Link to="/chat">
+          <Link to="/chat/messages">
             <h3 className="text-lg font-semibold mb-4">客戶訊息通知</h3>
             <ul className="list-disc ml-6 space-y-1 text-gray-700">
               <WeiMessage />

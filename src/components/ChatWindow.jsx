@@ -85,10 +85,10 @@ const ChatWindow = forwardRef(({ messages, selectedUser, managerMemberId }, ref)
       renderedMessages.push(
         <div
           key={uuidv4()}
-          className={`mt-3 flex ${isManagerSender ? "justify-end" : "justify-start"} ${msg.isbackread ? "" : "font-bold"}`}
+          className={`mt-3 flex ${isManagerSender ? "justify-end" : "justify-start"}`}
         >
           <div
-            className={`text-lg text-[#202020] font-chat relative p-3 rounded break-words whitespace-pre-wrap ${isManagerSender ? "bg-[#E0F2FC] text-right" : "bg-[#FBDCEA] text-left"} rounded-lg`}
+            className={`text-lg text-[#202020] font-chat relative p-3 rounded break-words whitespace-pre-wrap max-w-[75%] ${isManagerSender ? "bg-[#E0F2FC]" : "bg-[#FBDCEA]"} text-left rounded-lg`}
           >
             {msg.content}
             <div
@@ -107,7 +107,7 @@ const ChatWindow = forwardRef(({ messages, selectedUser, managerMemberId }, ref)
   return (
     <div
       ref={chatContainerRef}
-      className="w-full mb-5 h-[30rem] overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]"
+      className="w-full mb-5 h-[28rem] overflow-y-auto border border-gray-300 rounded-lg p-3 bg-[#FCF6F0]"
     >
       {selectedUser ? (
         renderMessagesWithDate()

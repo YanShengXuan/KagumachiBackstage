@@ -58,14 +58,14 @@ const BarChart = ({ data }) => {
 
     const options = {
         plugins: {
-            legend: { display: true },
+            legend: { display: false },
             tooltip: { enabled: true },
         },
         responsive: true,
         maintainAspectRatio: false,
         scales: {
             x: {
-                title: { display: false, text: "會計項目" },
+                title: { display: true, text: "會計項目" },
             },
             y: {
                 title: { display: true, text: "金額（單位：仟元）" },

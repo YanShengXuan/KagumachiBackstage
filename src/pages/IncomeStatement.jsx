@@ -13,9 +13,9 @@ const fetchData = () => {
     const revenue = getRandomNumber(50_000, 150_000); // 隨機營業收入（5萬 ~ 15萬）
     const cost = getRandomNumber(30_000, revenue);    // 隨機營業成本（3萬 ~ 收入）
     const profit = revenue - cost;                    // 毛利（收入 - 成本）
-    const otherIncome = getRandomNumber(1_000, 5000); // 業外收入
+    const otherIncome = getRandomNumber(-2_000, 5_000); // 業外收入
     const preTaxProfit = profit + otherIncome; // 稅前純益
-    const tax = getRandomNumber(5_000, 10_000); // 所得稅
+    const tax = getRandomNumber(7_500, 10_000); // 所得稅
     const netProfit = preTaxProfit - tax; // 稅後純益
 
     return { revenue, cost, profit, otherIncome, preTaxProfit, tax, netProfit };

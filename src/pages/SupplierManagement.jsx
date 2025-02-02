@@ -1,17 +1,70 @@
 import { useEffect, useState } from "react";
 import { Table, Button, Space, Input } from "antd";
 import Modal from "../components/Modal";
+import {
+  Combobox,
+  ComboboxButton,
+  ComboboxOptions,
+  ComboboxOption,
+} from "@headlessui/react";
 
 function SupplierManagement() {
   const buttonstyle =
-    "mt-1 bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[7%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
+    "m-1 bg-[rgb(83,87,89)] text-white p-2 rounded-xl w-[7%] hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
+
+  const [allcategories, setAllcategories] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [openGroup, setOpenGroup] = useState(null);
+  useEffect(() => {
+    fetch("http://localhost:8080/subcategories/getall")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setAllcategories(data);
+      });
+  }, []);
+  const wholeCategories = allcategories.reduce((acc, curr, idx) => {
+    const mainGroup = curr.mainCategory.categoryname;
+    if (!acc[mainGroup]) acc[mainGroup] = [];
+    acc[mainGroup].push({
+      id: idx + 1,
+      subGroup: curr.categoryname,
+      mainGroup: mainGroup,
+    });
+    return acc;
+  }, {});
 
   const [supplier, setSupplier] = useState("");
   const [selectedSupplier, setSelectedSupplier] = useState([]);
 
-  // const [mainCategory, setMainCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [selectedSubcategory, setSelectedSubcategory] = useState([]);
+  // const [subcategory, setSubcategory] = useState("");
+  // const [selectedSubcategory, setSelectedSubcategory] = useState([]);
+
+  const [total, setTotal] = useState(0); // 搜尋到的廠商總數
+
+  // 分頁設定
+  const paginationProps = {
+    pageSize: 4,
+    showTotal: (total) => `總共 ${total} 項`,
+    total: total,
+  };
+
+  // 廠商資料格式
+  const formatData = (data) => {
+    return data.map((item, index) => ({
+      key: index + 1,
+      number: index + 1,
+      name: item.name,
+      // category: item.subCategory.categoryname,
+      category: item.subCategory?.categoryname,
+      address: item.address,
+      phonenumber: item.phone,
+      contactor: item.contact,
+      status: item.status,
+      supplierid: item.supplierid,
+    }));
+  };
 
   // modal相關
   const initialFormData = {
@@ -26,7 +79,8 @@ function SupplierManagement() {
   const switchModal = () => {
     setIsModalOpen(!isModalOpen);
     setFormData(initialFormData);
-    setSubcategory("");
+    // setSubcategory("");
+    setSelected("");
   };
   const handleModalInputChange = (e, field) => {
     setFormData({
@@ -40,13 +94,35 @@ function SupplierManagement() {
 
   const [dataSource, setDataSource] = useState([]);
 
-  const handleSupplierChange = (e) => setSupplier(e.target.value);
-  const handleCategoryChange = (e) => setSubcategory(e.target.value);
+  // const handleSupplierChange = (e) => setSupplier(e.target.value);
+  // const handleCategoryChange = (e) => setSubcategory(e.target.value);
+  const handleSupplierChange = (e) => {
+    const value = e.target.value === "null" ? null : e.target.value;
+    setSupplier(value);
+  };
 
+  // 顯示所有廠商
+  useEffect(() => {
+    try {
+      fetch("http://localhost:8080/suppliers/allsuppliers")
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          setDataSource(formatData(data));
+        });
+    } catch (error) {
+      console.error("Error geting all suppliers:", error);
+    }
+  }, []);
+
+  // 搜尋廠商
   const handleSearch = () => {
     const payload = {
       supplierName: supplier,
-      subcategoryName: subcategory,
+      // subcategoryName: subcategory,
+      subcategoryName: selected.subGroup,
     };
 
     fetch("http://localhost:8080/suppliers/getbysearch", {
@@ -58,25 +134,12 @@ function SupplierManagement() {
     })
       .then((response) => response.json())
       .then((data) => {
-        const formattedData = data.map((item, index) => ({
-          key: index + 1, // 唯一鍵
-          number: index + 1,
-          name: item.name,
-          category: item.subCategory.categoryname,
-          address: item.address,
-          phonenumber: item.phone,
-          contactor: item.contact,
-          status: item.status,
-          supplierid: item.supplierid,
-        }));
-
-        setDataSource(formattedData);
+        setDataSource(formatData(data));
+        setTotal(data.length);
       })
       .catch((error) => {
         console.error("Error fetching suppliers:", error);
       });
-
-    console.log({ supplier, subcategory });
   };
 
   // 獲取下拉式廠商名單
@@ -89,15 +152,15 @@ function SupplierManagement() {
       .catch((error) => console.error("Error fetching supplier names:", error));
   }, []);
 
-  // 獲取下拉式分類名單
-  useEffect(() => {
-    fetch("http://localhost:8080/subcategories/getallnames")
-      .then((response) => response.json())
-      .then((data) => {
-        setSelectedSubcategory(data);
-      })
-      .catch((error) => console.error("Error fetching supplier names:", error));
-  }, []);
+  // // 獲取下拉式分類名單
+  // useEffect(() => {
+  //   fetch("http://localhost:8080/subcategories/getallnames")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setSelectedSubcategory(data);
+  //     })
+  //     .catch((error) => console.error("Error fetching supplier names:", error));
+  // }, []);
 
   // 新增廠商至資料庫
   const handleModalSubmit = () => {
@@ -110,7 +173,6 @@ function SupplierManagement() {
     })
       .then((response) => response.json)
       .then((result) => {
-        // setSupplier((prevSuppliers) => [...prevSuppliers, result]);
         console.log("新增:" + result.message);
         window.location.reload();
       })
@@ -131,6 +193,7 @@ function SupplierManagement() {
     setEditingRecord({});
   };
 
+  // 編輯廠商
   const saveChanges = () => {
     fetch("http://localhost:8080/suppliers/updatesupplier", {
       method: "POST",
@@ -154,6 +217,7 @@ function SupplierManagement() {
     setEditingKey(null);
   };
 
+  // 刪除廠商
   const deleteSupplier = (record) => {
     fetch("http://localhost:8080/suppliers/deletesupplier", {
       method: "POST",
@@ -304,7 +368,7 @@ function SupplierManagement() {
               onChange={handleSupplierChange}
               className="block mt-1 w-full p-2 rounded border border-gray-300 text-black"
             >
-              <option value="">請選擇廠商</option>
+              <option value="null">所有廠商</option>
               {selectedSupplier.map((supplier, index) => (
                 <option value={supplier} key={index}>
                   {supplier}
@@ -317,7 +381,55 @@ function SupplierManagement() {
         <div>
           <label className="block font-medium mb-2">
             家具分類:
-            <select
+            <Combobox
+              as="div"
+              className="relative"
+              value={selected}
+              onChange={setSelected}
+            >
+              <ComboboxButton className="bg-white border p-2 rounded w-full text-left mt-1">
+                {selected === null
+                  ? "所有分類"
+                  : selected.subGroup || "請選擇分類"}
+              </ComboboxButton>
+              <ComboboxOptions className="absolute z-10 w-full mt-1 bg-white shadow-md border rounded">
+                <ComboboxOption
+                  value={null}
+                  className="px-3 py-1 cursor-pointer bg-gray-100 text-gray-700 hover:bg-blue-500 hover:text-white"
+                >
+                  所有分類
+                </ComboboxOption>
+                {Object.entries(wholeCategories).map(([group, items]) => (
+                  <div key={group}>
+                    {/* 大分類標題 */}
+                    <div
+                      className="bg-gray-100 hover:bg-gray-200 px-3 py-2 text-gray-700 cursor-pointer flex justify-between"
+                      onClick={() =>
+                        setOpenGroup(openGroup === group ? null : group)
+                      }
+                    >
+                      {group}
+                      <span>{openGroup === group ? "▲" : "▼"}</span>
+                    </div>
+                    {/* 子分類 */}
+                    {openGroup === group && (
+                      <div className="pl-4">
+                        {items.map((item) => (
+                          <ComboboxOption
+                            key={item.id}
+                            value={item}
+                            className="px-3 py-1 cursor-pointer hover:bg-blue-500 hover:text-white"
+                          >
+                            {item.subGroup}
+                          </ComboboxOption>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </ComboboxOptions>
+            </Combobox>
+            {/* <select
               value={subcategory}
               onChange={handleCategoryChange}
               className="block mt-1 w-full p-2 rounded border border-gray-300 text-black"
@@ -328,17 +440,14 @@ function SupplierManagement() {
                   {subcategory}
                 </option>
               ))}
-            </select>
+            </select> */}
           </label>
         </div>
-        {/* 搜尋按鈕 */}
+        {/* 按鈕 */}
         <div>
           <button onClick={handleSearch} className={buttonstyle}>
             搜尋
           </button>
-        </div>
-        <div>
-          {/*新增廠商控制modal開關*/}
           <button onClick={switchModal} className={buttonstyle}>
             新增廠商
           </button>
@@ -346,7 +455,14 @@ function SupplierManagement() {
         {/* 分隔線 */}
         <hr className="my-4 border-gray-400" />
         {/* 搜尋結果表格 */}
-        <Table dataSource={dataSource} columns={columns} />
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          pagination={paginationProps}
+          scroll={{
+            y: 50 * 10,
+          }}
+        />
       </div>
       {/*modal開關*/}
       {isModalOpen && (
@@ -366,7 +482,54 @@ function SupplierManagement() {
             <br />
             <label className="block font-medium mb-2">
               家具分類:
-              <select
+              <Combobox
+                as="div"
+                className="relative"
+                value={selected}
+                // onChange={setSelected}
+                onChange={(selectedCategory) => {
+                  setSelected(selectedCategory);
+                  handleModalInputChange({
+                    target: { value: selectedCategory.subGroup },
+                    currentTarget: { name: "category" },
+                  });
+                }}
+              >
+                <ComboboxButton className="bg-white border p-2 rounded w-full text-left mt-1">
+                  {selected ? selected.subGroup : "請選擇分類"}
+                </ComboboxButton>
+                <ComboboxOptions className="absolute z-10 w-full mt-1 bg-white shadow-md border rounded">
+                  {Object.entries(wholeCategories).map(([group, items]) => (
+                    <div key={group}>
+                      {/* 大分類標題 */}
+                      <div
+                        className="bg-gray-100 hover:bg-gray-200 px-3 py-2 text-gray-700 cursor-pointer flex justify-between"
+                        onClick={() =>
+                          setOpenGroup(openGroup === group ? null : group)
+                        }
+                      >
+                        {group}
+                        <span>{openGroup === group ? "▲" : "▼"}</span>
+                      </div>
+                      {/* 子分類 */}
+                      {openGroup === group && (
+                        <div className="pl-4">
+                          {items.map((item) => (
+                            <ComboboxOption
+                              key={item.id}
+                              value={item}
+                              className="px-3 py-1 cursor-pointer hover:bg-blue-500 hover:text-white"
+                            >
+                              {item.subGroup}
+                            </ComboboxOption>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </ComboboxOptions>
+              </Combobox>
+              {/* <select
                 value={subcategory}
                 onChange={(e) => {
                   handleModalInputChange(e, "subcategoryName");
@@ -380,7 +543,7 @@ function SupplierManagement() {
                     {subcategory}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </label>
             <br />
             廠商地址：

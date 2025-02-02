@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, Button, Space, Input } from "antd";
 import { Link } from "react-router-dom";
 import Modal from "../components/Modal";
+import WarningModal from "../components/WarningModal";
 
 function Sales() {
   const buttonstyle =
@@ -13,7 +14,7 @@ function Sales() {
   const [saleSource, setSaleSource] = useState([]);
   const [total, setTotal] = useState(0); // 儲存資料總數
 
-  // modal相關
+  // 新增的Modal相關
   const initialFormData = {
     saleName: "",
     saleDescription: "",
@@ -31,6 +32,10 @@ function Sales() {
       [field]: e.target.value,
     });
   };
+
+  // 提示的Modal相關
+  const [isWarningModalOpen, setWarningModalOpen] = useState(false);
+  const [warningMessage, setWarningMessage] = useState("");
 
   // 顯示活動
   useEffect(() => {
@@ -121,15 +126,15 @@ function Sales() {
       dataIndex: "discount",
       key: "discount",
       width: "15%",
-      render: (text, record) =>
-        editingKey === record.key ? (
-          <Input
-            value={editingRecord.discount}
-            onChange={(e) => handleInputChange(e, "discount")}
-          />
-        ) : (
-          text
-        ),
+      // render: (text, record) =>
+      //   editingKey === record.key ? (
+      //     <Input
+      //       value={editingRecord.discount}
+      //       onChange={(e) => handleInputChange(e, "discount")}
+      //     />
+      //   ) : (
+      //     text
+      //   ),
     },
     {
       title: "編輯",
@@ -192,21 +197,32 @@ function Sales() {
 
   const deleteSale = (record) => {
     fetch("http://localhost:8080/sales/deletesale", {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(record),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Failed to delete sale");
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            throw new Error(errorData.error || "Failed to delete sale");
+          });
+        }
         return response.json();
       })
       .then(() => {
         window.location.reload();
       })
       .catch((error) => {
-        console.error("Deleting Sale Error:", error);
+        console.log(error);
+        if (error.message.includes("目前該活動被使用中")) {
+          setWarningMessage("目前該活動被使用中，無法直接刪除");
+          setWarningModalOpen(true);
+        } else {
+          setWarningMessage("刪除失敗，請稍後再試");
+          setWarningModalOpen(true);
+        }
       });
   };
 
@@ -249,7 +265,15 @@ function Sales() {
         />
       </div>
 
-      {/*modal開關*/}
+      {/* 刪除失敗警告Modal */}
+      <WarningModal
+        isOpen={isWarningModalOpen}
+        onClose={() => setWarningModalOpen(false)}
+        title="刪除失敗"
+        message={warningMessage}
+      />
+
+      {/*新增的Modal開關*/}
       {isModalOpen && (
         <Modal
           onClose={switchModal}
@@ -263,12 +287,13 @@ function Sales() {
               className="border rounded mt-1"
               value={formData.saleName}
               onChange={(e) => handleModalInputChange(e, "saleName")}
+              required
             />
             <br />
             活動敘述：
             <input
               type="text"
-              className="border rounded mt-1"
+              className="border rounded mt-1 w-full h-24 p-2"
               value={formData.saleDescription}
               onChange={(e) => handleModalInputChange(e, "saleDescription")}
             />
@@ -279,6 +304,9 @@ function Sales() {
               className="border rounded mt-1"
               value={formData.discount}
               onChange={(e) => handleModalInputChange(e, "discount")}
+              required
+              pattern="^\d+(\.\d{1,2})?$"
+              title="請輸入有效的小數"
             />
           </div>
         </Modal>

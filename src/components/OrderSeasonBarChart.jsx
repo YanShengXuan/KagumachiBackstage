@@ -49,11 +49,23 @@ function OrderSeasonBarChart() {
   const today = new Date();
   const endYear = today.getFullYear();
   const endMonth = today.getMonth() + 1;
+  let endDate;
+  switch(endMonth){
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+      endDate = 31;
+      break;
+    case 2 :
+      endDate = 28;
+      break;
+    default :
+      endDate = 30;
+      break;
+  };
   const startYear =
     endMonth - 2 < 1 ? today.getFullYear() - 1 : today.getFullYear();
   const startMonth = endMonth - 2 < 1 ? endMonth + 10 : endMonth - 2;
   const formatStartDate = `${startYear}-${String(startMonth).padStart(2, "0")}-01`;
-  const formatEndDate = `${endYear}-${String(endMonth).padStart(2, "0")}-31`;
+  const formatEndDate = `${endYear}-${String(endMonth).padStart(2, "0")}-${endDate}`;
   const getOrderSeasonUrl = `http://localhost:8080/order/orderSeason/${formatStartDate}/${formatEndDate}`;
   useEffect(() => {
     fetch(getOrderSeasonUrl, { method: "GET" })

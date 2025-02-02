@@ -1,16 +1,51 @@
-import React from 'react'
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import React, { useState, useEffect } from "react";
 
 // 必須先註冊 Chart.js 的元件
 ChartJS.register(ArcElement, Tooltip, Legend);
 const WeiPic = () => {
-    const data = {
+    
+    const [data, setData] = useState({
+        total: 0,
+        cost: 0,
+        fin: 0,
+        categoryCount: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
+    });
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/myback/getpic');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            console.log(result);
+            setData(result);
+            console.log(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const datas = {
         labels: ["櫃子", "桌子", "椅子", "沙發", "燈具", "寢具"],
         datasets: [
             {
                 label: "Votes",
-                data: [12, 19, 3, 5, 2, 3],
+                data: [
+                    data.categoryCount[1] || 0, 
+                    data.categoryCount[2] || 0, 
+                    data.categoryCount[3] || 0, 
+                    data.categoryCount[4] || 0, 
+                    data.categoryCount[5] || 0, 
+                    data.categoryCount[6] || 0
+                ],
                 backgroundColor: [
                     "rgba(255, 99, 132, 0.6)",
                     "rgba(54, 162, 235, 0.6)",
@@ -47,14 +82,11 @@ const WeiPic = () => {
     return (
         <>
             <h3 className="text-lg font-semibold mb-4">數據與報表分析</h3>
-            <p className="text-gray-700">總收入: <span className="font-semibold">1,000,000</span></p>
-            <p className="text-gray-700">總支出: <span className="font-semibold">5,000</span></p>
-            <p className="text-gray-700">利潤: <span className="font-semibold">5,000,000</span></p>
-            <div className="bg-red-500 h-4 rounded-full text-xs text-center text-white" style={{ width: "80%" }}>
-                80%
-            </div>
-            <div style={{ width: "50%", margin: "0 auto" }}>
-                <Pie data={data} options={options} />
+            <p className="text-gray-700 ">總收入: <span className="font-semibold ">{data.total}元</span></p>
+            <p className="text-gray-700">總支出: <span className="font-semibold ">{data.cost}元</span></p>
+            <p className="text-gray-700">利潤: <span className="font-semibold ">{data.fin}元</span></p>
+            <div className="w-[400px] h-[400px] mx-auto">
+                <Pie data={datas} options={options} />
             </div>
         </>
     )

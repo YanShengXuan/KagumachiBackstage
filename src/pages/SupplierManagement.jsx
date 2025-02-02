@@ -109,7 +109,6 @@ function SupplierManagement() {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
           setDataSource(formatData(data));
         });
     } catch (error) {
@@ -120,9 +119,9 @@ function SupplierManagement() {
   // 搜尋廠商
   const handleSearch = () => {
     const payload = {
-      supplierName: supplier,
+      supplierName: supplier || null,
       // subcategoryName: subcategory,
-      subcategoryName: selected.subGroup,
+      subcategoryName: selected?.subGroup || null,
     };
 
     fetch("http://localhost:8080/suppliers/getbysearch", {
@@ -164,14 +163,22 @@ function SupplierManagement() {
 
   // 新增廠商至資料庫
   const handleModalSubmit = () => {
+    const payload = {
+      supplierName: formData.supplierName,
+      subcategoryName: selected?.subGroup || null,
+      supplierAddress: formData.supplierAddress,
+      supplierPhone: formData.supplierPhone,
+      contactor: formData.contactor,
+    };
+
     fetch("http://localhost:8080/suppliers/addsupplier", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     })
-      .then((response) => response.json)
+      .then((response) => response.json())
       .then((result) => {
         console.log("新增:" + result.message);
         window.location.reload();

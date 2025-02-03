@@ -10,7 +10,7 @@ const WeiPic = () => {
         total: 0,
         cost: 0,
         fin: 0,
-        categoryCount: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
+        categoryAmounts: {} 
     });
     const fetchData = async () => {
         try {
@@ -37,14 +37,14 @@ const WeiPic = () => {
         labels: ["櫃子", "桌子", "椅子", "沙發", "燈具", "寢具"],
         datasets: [
             {
-                label: "Votes",
+                label: "各大類金額",
                 data: [
-                    data.categoryCount[1] || 0, 
-                    data.categoryCount[2] || 0, 
-                    data.categoryCount[3] || 0, 
-                    data.categoryCount[4] || 0, 
-                    data.categoryCount[5] || 0, 
-                    data.categoryCount[6] || 0
+                    data.categoryAmounts?.[1] ?? 0,
+                    data.categoryAmounts?.[2] ?? 0,
+                    data.categoryAmounts?.[3] ?? 0,
+                    data.categoryAmounts?.[4] ?? 0,
+                    data.categoryAmounts?.[5] ?? 0,
+                    data.categoryAmounts?.[6] ?? 0
                 ],
                 backgroundColor: [
                     "rgba(255, 99, 132, 0.6)",

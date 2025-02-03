@@ -80,9 +80,9 @@ const ChartOne = () => {
           text: "新增會員數量", // y 軸標題
         },
         min: 0, // y 軸最小值
-        max: 15, // y 軸最大值
+        max: 16, // y 軸最大值
         ticks: {
-          stepSize: 2, // y 軸的步進值
+          stepSize: 1, // y 軸的步進值
         },
         grid: {
           drawOnChartArea: false, // 隱藏網格線

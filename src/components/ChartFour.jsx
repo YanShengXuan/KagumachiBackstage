@@ -70,6 +70,7 @@ const ChartFour = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
+        display: false,
         position: 'top',
       },
     },

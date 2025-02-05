@@ -64,7 +64,7 @@ const ChartOne = () => {
     responsive: true,
     plugins: {
       legend: {
-        display: true, // 是否顯示圖例
+        display: false, // 是否顯示圖例
       },
     },
     scales: {

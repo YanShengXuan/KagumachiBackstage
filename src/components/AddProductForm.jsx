@@ -169,29 +169,26 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         }
     };
 
-
-    // 處理輸入變化
     const handleInputChange = (e, field, colorIndex = null, imageIndex = null) => {
         if (colorIndex !== null) {
             const updatedColors = [...formData.productColors];
-            if (imageIndex !== null) {
-                updatedColors[colorIndex].productImages[imageIndex][field] =
-                    field === "isPrimary" ? e.target.checked : e.target.value;
 
-                // 確保只有一個 isPrimary 為 true
-                if (field === "isPrimary" && e.target.checked) {
-                    updatedColors[colorIndex].productImages.forEach((img, idx) => {
-                        if (idx !== imageIndex) img.isprimary = false;
-                    });
+            if (imageIndex !== null) {
+                if (field === "isprimary") {
+                    updatedColors[colorIndex].productImages = updatedColors[colorIndex].productImages.map((img, idx) => ({
+                        ...img,
+                        isprimary: idx === imageIndex ? e.target.checked : false
+                    }));
+                } else {
+                    updatedColors[colorIndex].productImages[imageIndex][field] = e.target.value;
                 }
             } else {
                 updatedColors[colorIndex][field] = e.target.value;
             }
+
             setFormData({ ...formData, productColors: updatedColors });
         } else {
-            if (formData[field] === e.target.value) return;
             setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-
         }
     };
 
@@ -370,8 +367,9 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                             value={image.imageurl}
                             onChange={(e) => handleInputChange(e, "imageurl", colorIndex, imageIndex)}
                         />
+
                         <label>
-                            Primary:
+                            設為主要圖片
                             <input
                                 className={inputStyle}
                                 type="checkbox"

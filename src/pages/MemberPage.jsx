@@ -142,7 +142,7 @@ const MemberPage = () => {
 
                 </div>
 
-                <div className="mt-10 w-full max-h-[75vh] overflow-auto border border-gray-300">
+                <div className="mt-10 w-full max-h-[75vh] min-h-[75vh] overflow-auto border border-gray-300">
                     <table className="w-full bg-white">
                         <thead>
                         <tr>

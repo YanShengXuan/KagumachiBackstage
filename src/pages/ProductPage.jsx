@@ -221,7 +221,7 @@ const ProductPage = () => {
                     </div>
 
 
-                    <div className="mt-10 w-[100%] overflow-x-auto overflow-auto max-h-[70vh]">
+                    <div className="mt-10 w-[100%] overflow-x-auto overflow-auto max-h-[75vh]">
                         <table className=" min-w-[1600px] table-fixed bg-white ">
                             <thead>
                             <tr>

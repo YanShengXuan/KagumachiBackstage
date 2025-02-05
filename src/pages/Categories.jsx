@@ -164,7 +164,7 @@ const Categories = () => {
                         <form onSubmit={handleSubmit} className="my-4 mx-3">
                             <input
                                 placeholder="請輸入大分類"
-                                className={`${inputstyle} w-[200px]`}
+                                className={`${inputstyle} w-[130px]`}
                                 name="categoryname"
                                 value={formData.categoryname}
                                 onChange={(e) => handleChange(e, "main")}

@@ -145,6 +145,10 @@ const Categories = () => {
             .catch((error) => console.error("Error deleting subcategory:", error));
     };
 
+    const handleMainCategoryClick = (maincategoryid) => {
+        setSelectedMainId(maincategoryid);
+    };
+
     const inputstyle = "border border-[#161E24] focus:outline-none p-2 rounded-xl mr-1 w-full";
     const buttonstyle = "bg-[rgb(83,87,89)] text-white p-2 rounded-xl hover:bg-white hover:text-[rgb(83,87,89)] border border-[rgb(83,87,89)]";
     const thstyle = "border border-[#161E24] text-left p-4";
@@ -164,7 +168,7 @@ const Categories = () => {
                         <form onSubmit={handleSubmit} className="my-4 mx-3">
                             <input
                                 placeholder="請輸入大分類"
-                                className={`${inputstyle} w-[130px]`}
+                                className="border border-[#161E24] focus:outline-none p-2 rounded-xl mr-1 w-[25%]"
                                 name="categoryname"
                                 value={formData.categoryname}
                                 onChange={(e) => handleChange(e, "main")}
@@ -201,7 +205,14 @@ const Categories = () => {
                                 {maincategories.map((category, index) => (
                                     <tr key={category.maincategoryid || `temp-${index}`}>
                                         <td className={thstyle}>{category.maincategoryid}</td>
-                                        <td className={thstyle}>
+                                        {/*<td*/}
+                                        {/*    className={`${thstyle} cursor-pointer text-blue-600 hover:underline`}*/}
+                                        {/*    onClick={() => handleMainCategoryClick(category.maincategoryid)}*/}
+                                        {/*>*/}
+                                        {/*    {category.categoryname}*/}
+                                        {/*</td>*/}
+                                        <td className={`${thstyle} cursor-pointer `}
+                                            onClick={() => handleMainCategoryClick(category.maincategoryid)}>
                                             {editMainCategory?.maincategoryid === category.maincategoryid ? (
                                                 <input
                                                     className={inputstyle}

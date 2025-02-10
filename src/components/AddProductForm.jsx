@@ -124,6 +124,13 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
             const response = await fetch("http://localhost:8080/products/searchSuppliers");
             const data = await response.json();
             setSupplier(data);
+
+            const uniqueSuppliers = data.filter((supplier, index, self) =>
+                index === self.findIndex((s) => s.name === supplier.name)
+            );
+
+            setSupplier(uniqueSuppliers);
+
         } catch (error) {
             console.error("Failed to fetch supplier:", error);
         }
@@ -247,18 +254,18 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         e.preventDefault();
 
         if (!formData.productname || !formData.maincategoryid || !formData.subcategoryid) {
-            alert("請填寫商品名稱、主類別及副類別！");
+            // alert("請填寫商品名稱、主類別及副類別！");
             return;
         }
 
         if (!formData.unitprice || isNaN(formData.unitprice) || Number(formData.unitprice) <= 0) {
-            alert("請輸入有效的單價！");
+            // alert("請輸入有效的單價！");
             return;
         }
 
 
         if (!formData.productColors.length || formData.productColors.some(color => !color.colorname.trim())) {
-            alert("請至少新增一個顏色並填寫名稱！");
+            // alert("請至少新增一個顏色並填寫名稱！");
             return;
         }
         let calculatedDiscountPrice = formData.unitprice;

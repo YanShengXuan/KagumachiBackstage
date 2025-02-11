@@ -367,25 +367,34 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                 <h4>圖片</h4>
                 {color.productImages.map((image, imageIndex) => (
                     <div key={imageIndex}>
-                        <input
-                            className={inputStyle}
-                            type="text"
-                            placeholder="圖片 URL"
-                            value={image.imageurl}
-                            onChange={(e) => handleInputChange(e, "imageurl", colorIndex, imageIndex)}
-                        />
-
-                        <label>
-                            設為主要圖片
+                        <div className="flex items-center">
                             <input
                                 className={inputStyle}
-                                type="checkbox"
-                                checked={image.isprimary}
-                                onChange={(e) => handleInputChange(e, "isprimary", colorIndex, imageIndex)}
+                                type="text"
+                                placeholder="圖片 URL"
+                                value={image.imageurl}
+                                onChange={(e) => handleInputChange(e, "imageurl", colorIndex, imageIndex)}
                             />
-                        </label>
+                            {image.imageurl && (
+                                <img
+                                    src={image.imageurl}
+                                    alt="預覽圖片"
+                                    className="w-20 h-20 object-cover ml-2 rounded-lg shadow-md border"
+                                />
+                            )}
+                            <label>
+                                設為主要圖片
+                                <input
+                                    className={inputStyle}
+                                    type="checkbox"
+                                    checked={image.isprimary}
+                                    onChange={(e) => handleInputChange(e, "isprimary", colorIndex, imageIndex)}
+                                />
+                            </label>
+                        </div>
+
                     </div>
-                ))}
+                    ))}
                 <button
                     type="button"
                     onClick={() => addImageInput(colorIndex)}

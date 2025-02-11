@@ -124,6 +124,13 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
             const response = await fetch("http://localhost:8080/products/searchSuppliers");
             const data = await response.json();
             setSupplier(data);
+
+            const uniqueSuppliers = data.filter((supplier, index, self) =>
+                index === self.findIndex((s) => s.name === supplier.name)
+            );
+
+            setSupplier(uniqueSuppliers);
+
         } catch (error) {
             console.error("Failed to fetch supplier:", error);
         }
@@ -169,29 +176,26 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         }
     };
 
-
-    // 處理輸入變化
     const handleInputChange = (e, field, colorIndex = null, imageIndex = null) => {
         if (colorIndex !== null) {
             const updatedColors = [...formData.productColors];
-            if (imageIndex !== null) {
-                updatedColors[colorIndex].productImages[imageIndex][field] =
-                    field === "isPrimary" ? e.target.checked : e.target.value;
 
-                // 確保只有一個 isPrimary 為 true
-                if (field === "isPrimary" && e.target.checked) {
-                    updatedColors[colorIndex].productImages.forEach((img, idx) => {
-                        if (idx !== imageIndex) img.isprimary = false;
-                    });
+            if (imageIndex !== null) {
+                if (field === "isprimary") {
+                    updatedColors[colorIndex].productImages = updatedColors[colorIndex].productImages.map((img, idx) => ({
+                        ...img,
+                        isprimary: idx === imageIndex ? e.target.checked : false
+                    }));
+                } else {
+                    updatedColors[colorIndex].productImages[imageIndex][field] = e.target.value;
                 }
             } else {
                 updatedColors[colorIndex][field] = e.target.value;
             }
+
             setFormData({ ...formData, productColors: updatedColors });
         } else {
-            if (formData[field] === e.target.value) return;
             setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-
         }
     };
 
@@ -250,18 +254,18 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
         e.preventDefault();
 
         if (!formData.productname || !formData.maincategoryid || !formData.subcategoryid) {
-            alert("請填寫商品名稱、主類別及副類別！");
+            // alert("請填寫商品名稱、主類別及副類別！");
             return;
         }
 
         if (!formData.unitprice || isNaN(formData.unitprice) || Number(formData.unitprice) <= 0) {
-            alert("請輸入有效的單價！");
+            // alert("請輸入有效的單價！");
             return;
         }
 
 
         if (!formData.productColors.length || formData.productColors.some(color => !color.colorname.trim())) {
-            alert("請至少新增一個顏色並填寫名稱！");
+            // alert("請至少新增一個顏色並填寫名稱！");
             return;
         }
         let calculatedDiscountPrice = formData.unitprice;
@@ -363,24 +367,34 @@ const AddProductForm = ({ onClose, product, onSubmit  }) => {
                 <h4>圖片</h4>
                 {color.productImages.map((image, imageIndex) => (
                     <div key={imageIndex}>
-                        <input
-                            className={inputStyle}
-                            type="text"
-                            placeholder="圖片 URL"
-                            value={image.imageurl}
-                            onChange={(e) => handleInputChange(e, "imageurl", colorIndex, imageIndex)}
-                        />
-                        <label>
-                            Primary:
+                        <div className="flex items-center">
                             <input
                                 className={inputStyle}
-                                type="checkbox"
-                                checked={image.isprimary}
-                                onChange={(e) => handleInputChange(e, "isprimary", colorIndex, imageIndex)}
+                                type="text"
+                                placeholder="圖片 URL"
+                                value={image.imageurl}
+                                onChange={(e) => handleInputChange(e, "imageurl", colorIndex, imageIndex)}
                             />
-                        </label>
+                            {image.imageurl && (
+                                <img
+                                    src={image.imageurl}
+                                    alt="預覽圖片"
+                                    className="w-20 h-20 object-cover ml-2 rounded-lg shadow-md border"
+                                />
+                            )}
+                            <label>
+                                設為主要圖片
+                                <input
+                                    className={inputStyle}
+                                    type="checkbox"
+                                    checked={image.isprimary}
+                                    onChange={(e) => handleInputChange(e, "isprimary", colorIndex, imageIndex)}
+                                />
+                            </label>
+                        </div>
+
                     </div>
-                ))}
+                    ))}
                 <button
                     type="button"
                     onClick={() => addImageInput(colorIndex)}

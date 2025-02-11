@@ -221,7 +221,7 @@ const ProductPage = () => {
                     </div>
 
 
-                    <div className="mt-10 w-[100%] overflow-x-auto overflow-auto max-h-[70vh]">
+                    <div className="mt-10 w-[100%] overflow-x-auto overflow-auto max-h-[75vh]">
                         <table className=" min-w-[1600px] table-fixed bg-white ">
                             <thead>
                             <tr>
@@ -237,9 +237,9 @@ const ProductPage = () => {
                                 <th className={`${thstyle} min-w-[80px]`}>庫存</th>
                                 <th className={`${thstyle} min-w-[110px]`}>最低庫存數量</th>
                                 <th className={`${thstyle} min-w-[150px]`}>圖片</th>
-                                <th className={`${thstyle} min-w-[120px]`}>商品狀態</th>
-                                <th className={`${thstyle} min-w-[120px]`}>總共售出數量</th>
-                                <th className={`${thstyle} min-w-[80px]`}>評價</th>
+                                {/*<th className={`${thstyle} min-w-[120px]`}>商品狀態</th>*/}
+                                {/*<th className={`${thstyle} min-w-[120px]`}>總共售出數量</th>*/}
+                                {/*<th className={`${thstyle} min-w-[80px]`}>評價</th>*/}
                                 {/*<th className={`${thstyle} min-w-[250px]`}>商品描述</th>*/}
                                 <th className={`${thstyle} min-w-[150px]`}>更新日期</th>
                                 <th className={`${thstyle} min-w-[100px]`}>修改</th>
@@ -310,9 +310,9 @@ const ProductPage = () => {
                                                     />
                                                 ))}
                                         </td>
-                                        <td className={thstyle}>{product.status}</td>
-                                        <td className={thstyle}>{product.unitsold}</td>
-                                        <td className={thstyle}>{product.rating}</td>
+                                        {/*<td className={thstyle}>{product.status}</td>*/}
+                                        {/*<td className={thstyle}>{product.unitsold}</td>*/}
+                                        {/*<td className={thstyle}>{product.rating}</td>*/}
                                         {/*<td className={`${thstyle} p-1.5 m-0 h-26`}>*/}
                                         {/*    <div*/}
                                         {/*        className="overflow-y-auto h-[150px]"*/}

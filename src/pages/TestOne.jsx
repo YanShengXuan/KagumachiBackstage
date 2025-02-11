@@ -119,8 +119,8 @@ const TestOne = () => {
         <div className="bg-color2 rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold mb-4">系統通知</h3>
           <ul className="list-disc ml-6 space-y-1 text-gray-700">
-            <li>目前網站維修中</li>
-            <li>預計2/19前會修好</li>
+            <li>目前網站無異常</li>
+            {/* <li>預計2/19前會修好</li> */}
           </ul>
         </div>
       </div>

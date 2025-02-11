@@ -54,7 +54,7 @@ const Navbar = () => {
                     isOrderManagement ? "bg-color1" : "bg-color2"
                   }`}
                 >
-                  訂單管理
+                  訂單查詢
                 </div>
               </Link>
               <Link to="financialManagement">
@@ -63,7 +63,7 @@ const Navbar = () => {
                     isFinancialManagement ? "bg-color1" : "bg-color2"
                   }`}
                 >
-                  財務管理
+                  財務查詢
                 </div>
               </Link>
               <Link to="suppliermanagement">

@@ -148,7 +148,7 @@ function FinanceItem(props) {
           <td className={props.tableTdStyle}>{props.item}</td>
           <td className={props.tableTdStyle}>{props.details}</td>
           <td className={props.tableTdStyle}>{props.money}</td>
-          <td className={props.tableTdStyle}>
+          {/* <td className={props.tableTdStyle}>
             <button
               className={`${tableTdBtnStyle} w-[100%]`}
               onClick={() => {
@@ -157,7 +157,7 @@ function FinanceItem(props) {
             >
               修改
             </button>
-          </td>
+          </td> */}
         </tr>
       )}
     </>

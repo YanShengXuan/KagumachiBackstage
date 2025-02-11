@@ -56,7 +56,7 @@ function OrderManagement() {
   const orderMemberUrl = `http://localhost:8080/order/member/${orderId}`;
   const orderBetweenUrl = "http://localhost:8080/order/between";
   const orderTotalPriceASCUrl = "http://localhost:8080/order/totalpriceASC";
-  const orderStatusASCUrl = "http://localhost:8080/order/totalpriceASC";
+  const orderStatusASCUrl = "http://localhost:8080/order/orderstatusDESC";
 
   const ordersBetween = () => {
     setTempOrderIdState(false);
@@ -159,14 +159,6 @@ function OrderManagement() {
     <>
       <div className="w-full bg-[#A6A6A6] h-full pt-10">
         <div className="w-[95%] mx-auto bg-[rgb(216,216,216)] p-4 rounded-xl h-[97%]">
-          <div className="flex">
-            <div className="w-[45%] m-4">
-              <OrderMonthBarChart />
-            </div>
-            <div className="w-[55%] m-4">
-              <OrderSeasonBarChart />
-            </div>
-          </div>
           <div className="h-[25%] p-2">
             <div className="flex-row h-[85%]">
               <div className="flex justify-between">
@@ -213,7 +205,7 @@ function OrderManagement() {
                   </button>
                 </div>
               </div>
-              <div className="flex overflow-auto h-[200%] mt-2">
+              <div className="flex overflow-auto h-[210%] mt-2">
                 <table className="border-2 border-collapse mr-1 w-[100%]">
                   <thead>
                     <tr>
@@ -221,8 +213,8 @@ function OrderManagement() {
                       <th className={`${tableThStyle} w-[13%]`}>訂單編號</th>
                       <th className={`${tableThStyle} w-[8%]`}>訂購人</th>
                       <th className={`${tableThStyle} w-[10%]`}>訂購城市</th>
-                      <th className={`${tableThStyle} w-[10%]`}>付款方式</th>
-                      <th className={`${tableThStyle} w-[20%]`}>應付金額</th>
+                      <th className={`${tableThStyle} w-[12%]`}>付款方式</th>
+                      <th className={`${tableThStyle} w-[18%]`}>應付金額</th>
                       <th className={`${tableThStyle} w-[8%]`}>處理進度</th>
                       <th className={`${tableThStyle} w-[19%]`}>物流單號</th>
                     </tr>
@@ -230,6 +222,20 @@ function OrderManagement() {
                   <tbody>{showOrderData}</tbody>
                 </table>
               </div>
+            </div>
+          </div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <div className="flex justify-center h-[50%]">
+            <div className="w-[100%]  m-4">
+              <OrderSeasonBarChart />
             </div>
           </div>
         </div>

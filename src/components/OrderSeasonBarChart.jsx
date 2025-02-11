@@ -111,13 +111,14 @@ function OrderSeasonBarChart() {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
       },
       title: {
         display: true,
-        text: "三個月內訂單數",
+        text: "近三個月內訂單數",
         font: {
           size: 20,
         },

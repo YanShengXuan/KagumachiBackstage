@@ -279,7 +279,7 @@ function FinancialManagement() {
                   <th className={`${tableThStyle} w-[20%]`}>項目</th>
                   <th className={`${tableThStyle} w-[30%]`}>明細</th>
                   <th className={`${tableThStyle} w-[20%]`}>金額</th>
-                  <th className={`${tableThStyle} w-[10%]`}></th>
+                  {/* <th className={`${tableThStyle} w-[10%]`}></th> */}
                 </tr>
               </thead>
               <tbody>
